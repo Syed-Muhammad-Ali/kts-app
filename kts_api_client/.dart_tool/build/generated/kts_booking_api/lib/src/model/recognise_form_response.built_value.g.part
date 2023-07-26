@@ -1,0 +1,111 @@
+// **************************************************************************
+// BuiltValueGenerator
+// **************************************************************************
+
+class _$RecogniseFormResponse extends RecogniseFormResponse {
+  @override
+  final num? total;
+  @override
+  final String? supplier;
+  @override
+  final DateTime? date;
+
+  factory _$RecogniseFormResponse(
+          [void Function(RecogniseFormResponseBuilder)? updates]) =>
+      (new RecogniseFormResponseBuilder()..update(updates))._build();
+
+  _$RecogniseFormResponse._({this.total, this.supplier, this.date}) : super._();
+
+  @override
+  RecogniseFormResponse rebuild(
+          void Function(RecogniseFormResponseBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  RecogniseFormResponseBuilder toBuilder() =>
+      new RecogniseFormResponseBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is RecogniseFormResponse &&
+        total == other.total &&
+        supplier == other.supplier &&
+        date == other.date;
+  }
+
+  @override
+  int get hashCode {
+    var _$hash = 0;
+    _$hash = $jc(_$hash, total.hashCode);
+    _$hash = $jc(_$hash, supplier.hashCode);
+    _$hash = $jc(_$hash, date.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper(r'RecogniseFormResponse')
+          ..add('total', total)
+          ..add('supplier', supplier)
+          ..add('date', date))
+        .toString();
+  }
+}
+
+class RecogniseFormResponseBuilder
+    implements Builder<RecogniseFormResponse, RecogniseFormResponseBuilder> {
+  _$RecogniseFormResponse? _$v;
+
+  num? _total;
+  num? get total => _$this._total;
+  set total(num? total) => _$this._total = total;
+
+  String? _supplier;
+  String? get supplier => _$this._supplier;
+  set supplier(String? supplier) => _$this._supplier = supplier;
+
+  DateTime? _date;
+  DateTime? get date => _$this._date;
+  set date(DateTime? date) => _$this._date = date;
+
+  RecogniseFormResponseBuilder() {
+    RecogniseFormResponse._defaults(this);
+  }
+
+  RecogniseFormResponseBuilder get _$this {
+    final $v = _$v;
+    if ($v != null) {
+      _total = $v.total;
+      _supplier = $v.supplier;
+      _date = $v.date;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(RecogniseFormResponse other) {
+    ArgumentError.checkNotNull(other, 'other');
+    _$v = other as _$RecogniseFormResponse;
+  }
+
+  @override
+  void update(void Function(RecogniseFormResponseBuilder)? updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  RecogniseFormResponse build() => _build();
+
+  _$RecogniseFormResponse _build() {
+    final _$result = _$v ??
+        new _$RecogniseFormResponse._(
+            total: total, supplier: supplier, date: date);
+    replace(_$result);
+    return _$result;
+  }
+}
+
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

@@ -1,0 +1,2189 @@
+x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))
+swagger: 2.0
+info:
+  title: My Title
+  version: 1.0.0
+produces:
+- text/plain
+- application/json
+- text/json
+paths:
+  /api/AccountRead/account:
+    get:
+      tags:
+      - AccountRead
+      operationId: AccountRead_GetAccount
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/GetAccountResponse'
+  /api/AccountRead/account-exists/:email:
+    get:
+      tags:
+      - AccountRead
+      operationId: AccountRead_AccountExists
+      parameters:
+      - type: string
+        name: email
+        in: query
+        x-nullable: true
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AccountExistsResponse'
+  /api/AccountRead/init-account-expenses-for-category:
+    get:
+      tags:
+      - AccountRead
+      operationId: AccountRead_InitAccountExpensesForCategory
+      parameters:
+      - type: integer
+        name: categoryId
+        in: query
+        format: int64
+        x-nullable: false
+      - type: integer
+        name: accountingPeriodId
+        in: query
+        format: int64
+        x-nullable: true
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/InitAccountExpensesResponse'
+  /api/AccountRead/init-account-expenses-by-category:
+    get:
+      tags:
+      - AccountRead
+      operationId: AccountRead_InitAccountExpensesByCategory
+      parameters:
+      - type: integer
+        name: accountingPeriodId
+        in: query
+        format: int64
+        x-nullable: true
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/InitAccountExpenseByCategoryResponse'
+  /api/AccountRead/init-account-expense:
+    get:
+      tags:
+      - AccountRead
+      operationId: AccountRead_InitAccountExpense
+      parameters:
+      - type: integer
+        name: expenseId
+        in: query
+        format: int64
+        x-nullable: true
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/InitAccountExpenseResponse'
+  /api/AccountRead/init-account-incomes:
+    get:
+      tags:
+      - AccountRead
+      operationId: AccountRead_InitAccountIncomes
+      parameters:
+      - type: integer
+        name: accountingPeriodId
+        in: query
+        format: int64
+        x-nullable: true
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/InitAccountIncomesResponse'
+  /api/AccountRead/init-account-income:
+    get:
+      tags:
+      - AccountRead
+      operationId: AccountRead_InitAccountIncome
+      parameters:
+      - type: integer
+        name: incomeId
+        in: query
+        format: int64
+        x-nullable: true
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/InitAccountIncomeResponse'
+  /api/AccountRead/appointments:
+    get:
+      tags:
+      - AccountRead
+      operationId: AccountRead_GetAppointments
+      parameters:
+      - type: string
+        name: start
+        in: query
+        format: date-time
+        x-nullable: false
+      - type: string
+        name: end
+        in: query
+        format: date-time
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/GetAppointmentResponse'
+  /api/AccountRead/init-appointment:
+    get:
+      tags:
+      - AccountRead
+      operationId: AccountRead_InitAppointment
+      parameters:
+      - type: integer
+        name: appointmentId
+        in: query
+        format: int64
+        x-nullable: true
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/InitAppointmentResponse'
+  /api/AccountRead/overview:
+    get:
+      tags:
+      - AccountRead
+      operationId: AccountRead_GetAccoutingPeriodOverview
+      parameters:
+      - type: integer
+        name: accountingPeriodId
+        in: query
+        format: int64
+        x-nullable: true
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AccountingPeriodOverviewResponse'
+  /api/AccountRead/init-customers:
+    get:
+      tags:
+      - AccountRead
+      operationId: AccountRead_InitCustomers
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/InitCustomersResponse'
+  /api/AccountRead/init-services:
+    get:
+      tags:
+      - AccountRead
+      operationId: AccountRead_InitServices
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/InitServicesResponse'
+  /api/AccountRead/notifications:
+    get:
+      tags:
+      - AccountRead
+      operationId: AccountRead_GetAccountNotifications
+      parameters:
+      - type: boolean
+        name: all
+        in: query
+        default: false
+        x-nullable: true
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/GetAccountNotificationsResponse'
+  /api/AccountRead/should-update:
+    get:
+      tags:
+      - AccountRead
+      operationId: AccountRead_ShouldUpdate
+      parameters:
+      - type: string
+        name: versionLabel
+        in: query
+        x-nullable: true
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            type: boolean
+  /api/AccountWrite/signup:
+    post:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_Signup
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/SignupRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/SignupResponse'
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+  /api/AccountWrite:
+    put:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_UpdateAccount
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateAccountRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/UpdateAccountResponse'
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+  /api/AccountWrite/expense:
+    post:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_CreateExpense
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateExpenseRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/CreateExpenseResponse'
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+    put:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_UpdateExpense
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateExpenseRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/UpdateExpenseResponse'
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+    delete:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_DeleteExpense
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteExpenseRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            type: boolean
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+  /api/AccountWrite/file:
+    post:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_UploadFile
+      consumes:
+      - multipart/form-data
+      parameters:
+      - type: file
+        name: formFile
+        in: formData
+        x-nullable: true
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/UploadFileResponse'
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+  /api/AccountWrite/appointment:
+    post:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_CreateAppointment
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateAppointmentRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/CreateAppointmentResponse'
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+    put:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_UpdateAppointment
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateAppointmentRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/UpdateAppointmentResponse'
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+  /api/AccountWrite/customers:
+    post:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_CreateCustomer
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateCustomerRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/CreateCusotmerResponse'
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+    put:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_UpdateCustomer
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateCustomerRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/UpdateCusotmerResponse'
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+    delete:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_DeleteCustomer
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteCustomerRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            type: boolean
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+  /api/AccountWrite/services:
+    post:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_CreateService
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateServiceRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/CreateServiceResponse'
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+    put:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_UpdateService
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateServiceRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/UpdateServiceResponse'
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+    delete:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_DeleteService
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteServiceRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            type: boolean
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+  /api/AccountWrite/income:
+    post:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_CreateIncome
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateIncomeRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/CreateIncomeResponse'
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+    put:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_UpdateIncome
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateIncomeRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/UpdateIncomeResponse'
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+    delete:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_DeleteIncome
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteIncomeRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            type: boolean
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+  /api/AccountWrite/appointments/cancel:
+    delete:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_CancelAppointment
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CancelAppointmentRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            type: boolean
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+  /api/AccountWrite/notifications/set-read:
+    put:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_SetNotificationRead
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/SetNotificationRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            type: boolean
+        400:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        404:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+  /api/AccountWrite/forgot-password:
+    put:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_ForgotPassword
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/ForgotPasswordRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            type: boolean
+  /api/AccountWrite/change-password:
+    put:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_ChangePassword
+      consumes:
+      - application/json-patch+json
+      - application/json
+      - text/json
+      - application/*+json
+      parameters:
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/ChangePasswordRequest'
+        x-nullable: false
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            type: boolean
+  /api/AccountWrite/delete:
+    put:
+      tags:
+      - AccountWrite
+      operationId: AccountWrite_Delete
+      responses:
+        500:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        422:
+          x-nullable: false
+          description: ''
+          schema:
+            $ref: '#/definitions/AppFacProblemDetails'
+        200:
+          x-nullable: false
+          description: ''
+          schema:
+            type: boolean
+definitions:
+  AppFacProblemDetails:
+    allOf:
+    - $ref: '#/definitions/ProblemDetails'
+    - type: object
+      additionalProperties: {}
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+  ProblemDetails:
+    type: object
+    additionalProperties: {}
+    required:
+    - extensions
+    properties:
+      type:
+        type: string
+      title:
+        type: string
+      status:
+        type: integer
+        format: int32
+      detail:
+        type: string
+      instance:
+        type: string
+      extensions:
+        type: object
+        additionalProperties: {}
+  GetAccountResponse:
+    type: object
+    properties:
+      account:
+        $ref: '#/definitions/AccountDto'
+  AccountDto:
+    type: object
+    required:
+    - subscriptionType
+    - isTestAccount
+    properties:
+      nationalInsuranceNumber:
+        type: string
+      name:
+        type: string
+      address:
+        $ref: '#/definitions/AddressDto'
+      dateOfBirth:
+        type: string
+        format: date-time
+      utr:
+        type: string
+      annualEmploymentIncome:
+        type: number
+        format: decimal
+      subscriptionType:
+        $ref: '#/definitions/SubscriptionType'
+      user:
+        $ref: '#/definitions/BkUserDto'
+      appStoreUserId:
+        type: string
+      isTestAccount:
+        type: boolean
+  AddressDto:
+    type: object
+    required:
+    - country
+    properties:
+      addressLine1:
+        type: string
+      addressLine2:
+        type: string
+      postcode:
+        type: string
+      town:
+        type: string
+      county:
+        type: string
+      country:
+        $ref: '#/definitions/Country'
+  Country:
+    type: string
+    description: ''
+    x-enumNames:
+    - EnglandAndNorthernIreland
+    - Scotland
+    - Wales
+    enum:
+    - EnglandAndNorthernIreland
+    - Scotland
+    - Wales
+  SubscriptionType:
+    type: string
+    description: ''
+    x-enumNames:
+    - Standard
+    - Premium
+    enum:
+    - Standard
+    - Premium
+  BkUserDto:
+    type: object
+    properties:
+      displayName:
+        type: string
+      username:
+        type: string
+  AccountExistsResponse:
+    type: object
+    required:
+    - exists
+    properties:
+      exists:
+        type: boolean
+  InitAccountExpensesResponse:
+    type: object
+    required:
+    - totalExpenseSum
+    properties:
+      accountingPeriod:
+        $ref: '#/definitions/AccoutingPeriodDto'
+      totalExpenseSum:
+        type: number
+        format: decimal
+      expenses:
+        type: array
+        items:
+          $ref: '#/definitions/ExpenseDto'
+      category:
+        $ref: '#/definitions/ExpenseCategoryDto'
+  AccoutingPeriodDto:
+    type: object
+    required:
+    - id
+    - periodStartDate
+    - periodEndDate
+    properties:
+      id:
+        type: integer
+        format: int64
+      periodStartDate:
+        type: string
+        format: date-time
+      periodEndDate:
+        type: string
+        format: date-time
+  ExpenseDto:
+    type: object
+    required:
+    - amount
+    - id
+    - paymentMethod
+    - paidDateTime
+    properties:
+      amount:
+        type: number
+        format: decimal
+      category:
+        $ref: '#/definitions/ExpenseCategoryDto'
+      id:
+        type: integer
+        format: int64
+      notes:
+        type: string
+      paymentMethod:
+        $ref: '#/definitions/PaymentMethod'
+      paidDateTime:
+        type: string
+        format: date-time
+      supplier:
+        type: string
+      receipt:
+        $ref: '#/definitions/FileDto'
+  ExpenseCategoryDto:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      helpText:
+        type: string
+      helpUrl:
+        type: string
+      placeHolderExampleText:
+        type: string
+  PaymentMethod:
+    type: string
+    description: ''
+    x-enumNames:
+    - Cash
+    - Bank
+    enum:
+    - Cash
+    - Bank
+  FileDto:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+  InitAccountExpenseByCategoryResponse:
+    type: object
+    properties:
+      period:
+        $ref: '#/definitions/AccoutingPeriodDto'
+      expenseByCategories:
+        type: array
+        items:
+          $ref: '#/definitions/ExpenseByCategoryItem'
+  ExpenseByCategoryItem:
+    type: object
+    required:
+    - total
+    properties:
+      category:
+        $ref: '#/definitions/ExpenseCategoryDto'
+      total:
+        type: number
+        format: decimal
+  InitAccountExpenseResponse:
+    type: object
+    properties:
+      expenseCategories:
+        type: array
+        items:
+          $ref: '#/definitions/ExpenseCategoryDto'
+      expense:
+        $ref: '#/definitions/ExpenseDto'
+  InitAccountIncomesResponse:
+    type: object
+    required:
+    - totalIncomeSum
+    properties:
+      accountingPeriod:
+        $ref: '#/definitions/AccoutingPeriodDto'
+      income:
+        type: array
+        items:
+          $ref: '#/definitions/IncomeDto'
+      totalIncomeSum:
+        type: number
+        format: decimal
+  IncomeDto:
+    type: object
+    required:
+    - id
+    - amount
+    - paymentDateTime
+    properties:
+      id:
+        type: integer
+        format: int64
+      amount:
+        type: number
+        format: decimal
+      description:
+        type: string
+      paymentMethod:
+        $ref: '#/definitions/PaymentMethod'
+      paymentDateTime:
+        type: string
+        format: date-time
+  InitAccountIncomeResponse:
+    type: object
+    properties:
+      accountingPeriod:
+        $ref: '#/definitions/AccoutingPeriodDto'
+      income:
+        $ref: '#/definitions/IncomeDto'
+  GetAppointmentResponse:
+    type: object
+    properties:
+      appointments:
+        type: array
+        items:
+          $ref: '#/definitions/AppointmentDto'
+  AppointmentDto:
+    type: object
+    required:
+    - id
+    - startDateTime
+    - endDateTime
+    - cost
+    - deposit
+    - remainingBalance
+    properties:
+      id:
+        type: integer
+        format: int64
+      startDateTime:
+        type: string
+        format: date-time
+      endDateTime:
+        type: string
+        format: date-time
+      customer:
+        $ref: '#/definitions/CustomerDto'
+      services:
+        $ref: '#/definitions/ServiceDto'
+      cost:
+        type: number
+        format: decimal
+      deposit:
+        type: number
+        format: decimal
+      remainingBalance:
+        type: number
+        format: decimal
+  CustomerDto:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      mobileNumber:
+        type: string
+      email:
+        type: string
+  ServiceDto:
+    type: object
+    required:
+    - id
+    - totalPrice
+    - depositType
+    - deposit
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      totalPrice:
+        type: number
+        format: decimal
+      depositType:
+        $ref: '#/definitions/DepositType'
+      deposit:
+        type: number
+        format: decimal
+      defaultAppointmentDuration:
+        type: integer
+        format: int32
+  DepositType:
+    type: string
+    description: ''
+    x-enumNames:
+    - Percentage
+    - Fixed
+    enum:
+    - Percentage
+    - Fixed
+  InitAppointmentResponse:
+    type: object
+    properties:
+      customers:
+        type: array
+        items:
+          $ref: '#/definitions/CustomerDto'
+      services:
+        type: array
+        items:
+          $ref: '#/definitions/ServiceDto'
+      income:
+        type: array
+        items:
+          $ref: '#/definitions/IncomeDto'
+      appointment:
+        $ref: '#/definitions/AppointmentDto'
+  AccountingPeriodOverviewResponse:
+    type: object
+    properties:
+      current:
+        $ref: '#/definitions/AccountingPeriodOverviewStats'
+      forecasted:
+        $ref: '#/definitions/AccountingPeriodOverviewStats'
+  AccountingPeriodOverviewStats:
+    type: object
+    required:
+    - revenue
+    - expenses
+    - profit
+    - taxLiability
+    - nic
+    properties:
+      revenue:
+        type: number
+        format: decimal
+      expenses:
+        type: number
+        format: decimal
+      profit:
+        type: number
+        format: decimal
+      taxLiability:
+        type: number
+        format: decimal
+      nic:
+        type: number
+        format: decimal
+  InitCustomersResponse:
+    type: object
+    properties:
+      customers:
+        type: array
+        items:
+          $ref: '#/definitions/CustomerDto'
+  InitServicesResponse:
+    type: object
+    properties:
+      services:
+        type: array
+        items:
+          $ref: '#/definitions/ServiceDto'
+  GetAccountNotificationsResponse:
+    type: object
+    properties:
+      notifications:
+        type: array
+        items:
+          $ref: '#/definitions/NotificationDto'
+  NotificationDto:
+    type: object
+    discriminator: discriminator
+    required:
+    - id
+    - discriminator
+    properties:
+      id:
+        type: integer
+        format: int64
+      header:
+        type: string
+      message:
+        type: string
+      readDateTime:
+        type: string
+        format: date-time
+      discriminator:
+        type: string
+  WelcomeNotificationDto:
+    allOf:
+    - $ref: '#/definitions/NotificationDto'
+    - type: object
+  SignupResponse:
+    type: object
+    required:
+    - accountId
+    properties:
+      accountId:
+        type: integer
+        format: int64
+  SignupRequest:
+    type: object
+    required:
+    - dateOfBirth
+    - annualEmploymentIncome
+    properties:
+      nino:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      name:
+        type: string
+      address:
+        $ref: '#/definitions/AddressDto'
+      dateOfBirth:
+        type: string
+        format: date-time
+      utr:
+        type: string
+      annualEmploymentIncome:
+        type: number
+        format: decimal
+      subscriptionType:
+        $ref: '#/definitions/SubscriptionType'
+      appStoreId:
+        type: string
+  UpdateAccountResponse:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  UpdateAccountRequest:
+    type: object
+    required:
+    - annualEmploymentIncome
+    properties:
+      email:
+        type: string
+      nino:
+        type: string
+      name:
+        type: string
+      address:
+        $ref: '#/definitions/AddressDto'
+      dateOfBirth:
+        type: string
+        format: date-time
+      utr:
+        type: string
+      annualEmploymentIncome:
+        type: number
+        format: decimal
+  CreateExpenseResponse:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  CreateExpenseRequest:
+    type: object
+    required:
+    - paidDateTime
+    - amount
+    - categoryId
+    - paymentMethod
+    properties:
+      paidDateTime:
+        type: string
+        format: date-time
+      amount:
+        type: number
+        format: decimal
+      categoryId:
+        type: integer
+        format: int64
+      notes:
+        type: string
+      paymentMethod:
+        $ref: '#/definitions/PaymentMethod'
+      recieptId:
+        type: integer
+        format: int64
+      supplier:
+        type: string
+  UpdateExpenseResponse:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  UpdateExpenseRequest:
+    type: object
+    required:
+    - id
+    - paidDateTime
+    - amount
+    - categoryId
+    - paymentMethod
+    properties:
+      id:
+        type: integer
+        format: int64
+      paidDateTime:
+        type: string
+        format: date-time
+      amount:
+        type: number
+        format: decimal
+      categoryId:
+        type: integer
+        format: int64
+      notes:
+        type: string
+      paymentMethod:
+        $ref: '#/definitions/PaymentMethod'
+      recieptId:
+        type: integer
+        format: int64
+      supplier:
+        type: string
+  DeleteExpenseRequest:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  UploadFileResponse:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  CreateAppointmentResponse:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  CreateAppointmentRequest:
+    type: object
+    required:
+    - startDateTime
+    - endDateTime
+    - customerId
+    - serviceId
+    - cost
+    - depositAmount
+    properties:
+      startDateTime:
+        type: string
+        format: date-time
+      endDateTime:
+        type: string
+        format: date-time
+      customerId:
+        type: integer
+        format: int64
+      serviceId:
+        type: integer
+        format: int64
+      cost:
+        type: number
+        format: decimal
+      depositAmount:
+        type: number
+        format: decimal
+      payments:
+        type: array
+        items:
+          $ref: '#/definitions/Payment'
+  Payment:
+    type: object
+    required:
+    - paymentDateTime
+    - amount
+    - paymentMethod
+    properties:
+      paymentDateTime:
+        type: string
+        format: date-time
+      amount:
+        type: number
+        format: decimal
+      paymentMethod:
+        $ref: '#/definitions/PaymentMethod'
+  UpdateAppointmentResponse:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  UpdateAppointmentRequest:
+    type: object
+    required:
+    - id
+    - customerId
+    - serviceId
+    - startDateTime
+    - endDateTime
+    - depositAmount
+    - cost
+    properties:
+      id:
+        type: integer
+        format: int64
+      customerId:
+        type: integer
+        format: int64
+      serviceId:
+        type: integer
+        format: int64
+      startDateTime:
+        type: string
+        format: date-time
+      endDateTime:
+        type: string
+        format: date-time
+      depositAmount:
+        type: number
+        format: decimal
+      cost:
+        type: number
+        format: decimal
+      addPayments:
+        type: array
+        items:
+          $ref: '#/definitions/Payment2'
+      removePayments:
+        type: array
+        items:
+          type: integer
+          format: int64
+  Payment2:
+    type: object
+    required:
+    - paymentDateTime
+    - amount
+    - paymentMethod
+    properties:
+      paymentDateTime:
+        type: string
+        format: date-time
+      amount:
+        type: number
+        format: decimal
+      paymentMethod:
+        $ref: '#/definitions/PaymentMethod'
+  CreateCusotmerResponse:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  CreateCustomerRequest:
+    type: object
+    properties:
+      name:
+        type: string
+      mobileNumber:
+        type: string
+      email:
+        type: string
+  UpdateCusotmerResponse:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  UpdateCustomerRequest:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      mobileNumber:
+        type: string
+      email:
+        type: string
+  DeleteCustomerRequest:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  CreateServiceResponse:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  CreateServiceRequest:
+    type: object
+    required:
+    - totalPrice
+    - depositType
+    - deposit
+    properties:
+      name:
+        type: string
+      totalPrice:
+        type: number
+        format: decimal
+      depositType:
+        $ref: '#/definitions/DepositType'
+      deposit:
+        type: number
+        format: decimal
+      defaultAppointmentDuration:
+        type: integer
+        format: int32
+  UpdateServiceResponse:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  UpdateServiceRequest:
+    type: object
+    required:
+    - id
+    - totalPrice
+    - depositType
+    - deposit
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      totalPrice:
+        type: number
+        format: decimal
+      depositType:
+        $ref: '#/definitions/DepositType'
+      deposit:
+        type: number
+        format: decimal
+      defaultAppointmentDuration:
+        type: integer
+        format: int32
+  DeleteServiceRequest:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  CreateIncomeResponse:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  CreateIncomeRequest:
+    type: object
+    required:
+    - amount
+    - paymentDateTime
+    properties:
+      amount:
+        type: number
+        format: decimal
+      description:
+        type: string
+      paymentMethod:
+        $ref: '#/definitions/PaymentMethod'
+      paymentDateTime:
+        type: string
+        format: date-time
+  UpdateIncomeResponse:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  UpdateIncomeRequest:
+    type: object
+    required:
+    - id
+    - amount
+    - paymentDateTime
+    properties:
+      id:
+        type: integer
+        format: int64
+      description:
+        type: string
+      amount:
+        type: number
+        format: decimal
+      paymentMethod:
+        $ref: '#/definitions/PaymentMethod'
+      paymentDateTime:
+        type: string
+        format: date-time
+  DeleteIncomeRequest:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  CancelAppointmentRequest:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  SetNotificationRequest:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        format: int64
+  ForgotPasswordRequest:
+    type: object
+    properties:
+      emailAddress:
+        type: string
+  ChangePasswordRequest:
+    type: object
+    properties:
+      password:
+        type: string

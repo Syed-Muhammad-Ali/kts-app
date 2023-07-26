@@ -1,0 +1,5 @@
+# Config options for the dart-dio generator
+
+pubName: kts_booking_api
+pubVersion: 0.0.1
+pubDescription: "KTS Booking API Client"

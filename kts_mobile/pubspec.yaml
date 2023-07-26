@@ -1,0 +1,224 @@
+name: kts_mobile
+description: Kts book keeping app
+
+#co.uk.ktsbookkeeping - bundle identifier
+#name KTS Book Keeping
+#https://docs.flutter.dev/deployment/ios
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 1.0.3+29
+
+environment:
+  sdk: '>=2.19.0 <3.0.0'
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
+  form_field_validator: ^1.1.0
+  package_info_plus: ^1.3.0
+  dio: ^5.0.0
+  #flutter_secure_storage: ^5.0.2
+  flutter_easyloading: ^3.0.3
+  uuid: ^3.0.6
+  material_design_icons_flutter: ^5.0.6595
+  provider: ^6.0.2
+  dart_date: ^1.1.1
+  flutter_svg_provider: ^1.0.3
+  easy_debounce: ^2.0.2+1
+  jwt_decoder: ^2.0.1
+  path_provider: ^2.0.9
+  is_first_run: ^1.0.0
+  shared_preferences: ^2.0.13
+  sqflite: ^2.0.2
+  multi_select_flutter: ^4.1.2
+  kts_booking_api:
+    path: ../kts_api_client
+  go_router: ^6.0.1
+  connectivity_plus: ^3.0.3
+  dotted_border: ^2.0.0+3
+  image_picker: ^0.8.6+3
+  syncfusion_flutter_calendar: 20.4.53
+  purchases_flutter: ^4.0.0
+  flutter_svg: ^1.0.1
+  url_launcher: ^6.1.10
+  flutter_secure_storage: ^8.0.0
+  launch_review: ^3.0.1
+  dropdown_search: ^5.0.6
+
+dev_dependencies:
+  integration_test:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.12.0
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/app/kts-icon_background.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^1.0.0
+  build_runner: ^2.1.7
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - images/splash/splash-screen-background.png
+    - images/kts-logo.svg
+    - images/kts-background.svg
+    - images/kts-background.png
+    - images/icons/bell_icon.svg
+    - images/icons/info_icon.svg
+    - images/icons/location_icon.svg
+    - images/icons/nino_icon.svg
+    - images/icons/person_icon.svg
+    - images/icons/utr_icon.svg
+    - images/icons/pound_sign_icon.svg
+    - images/icons/coins_icon.svg
+    - images/icons/check_icon.svg
+    - images/icons/lock_icon.svg
+    - images/icons/calendar_icon.svg
+    - images/icons/expenses_icon.svg
+    - images/icons/overview_icon.svg
+    - images/icons/summaries_icon.svg
+    - images/profile-demo.png
+    - images/overview/bubble_bottom_left.svg
+    - images/overview/bubble_bottom_right.svg
+    - images/overview/bubble_center.svg
+    - images/overview/bubble_top_left.svg
+    - images/overview/elipse_bottom.svg
+    - images/overview/elipse_left.svg
+    - images/overview/elipse_top_right.svg
+    - images/overview/elipse_top.svg
+    - images/overview/glow-center.png
+    - images/app/kts-icon_background.png
+    - images/kts-pink-overlay.svg
+    - images/kts-logo-full.svg
+    - images/overview/glow-center.svg
+    - images/overview/tab-background.svg
+    - images/overview/bubble_center.png
+    - images/overview/bubble_bottom_left.png
+    - images/overview/bubble_top_left.png
+    - images/overview/bubble_bottom_right.png
+
+    
+    
+
+  #   - images/a_dot_ham.jpeg
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware.
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    # For details regarding fonts from package dependencies,
+    # see https://flutter.dev/custom-fonts/#from-packages
+    - family: Montserrat
+      fonts:
+        - asset: fonts/Montserrat-Thin.ttf
+          weight: 100
+        - asset: fonts/Montserrat-ThinItalic.ttf
+          style: italic
+          weight: 100
+        - asset: fonts/Montserrat-ExtraLight.ttf
+          weight: 200
+        - asset: fonts/Montserrat-ExtraLightItalic.ttf
+          style: italic
+          weight: 200
+        - asset: fonts/Montserrat-Light.ttf
+          weight: 300
+        - asset: fonts/Montserrat-LightItalic.ttf
+          style: italic
+          weight: 300
+        - asset: fonts/Montserrat-Regular.ttf
+          weight: 400
+        - asset: fonts/Montserrat-Medium.ttf
+          weight: 500
+        - asset: fonts/Montserrat-MediumItalic.ttf
+          style: italic
+          weight: 500
+        - asset: fonts/Montserrat-SemiBold.ttf
+          weight: 600
+        - asset: fonts/Montserrat-SemiBoldItalic.ttf
+          style: italic
+          weight: 600
+        - asset: fonts/Montserrat-Bold.ttf
+          weight: 700
+        - asset: fonts/Montserrat-BoldItalic.ttf
+          style: italic
+          weight: 700
+        - asset: fonts/Montserrat-ExtraBold.ttf
+          weight: 800
+        - asset: fonts/Montserrat-ExtraBoldItalic.ttf
+          style: italic
+          weight: 800
+        - asset: fonts/Montserrat-Black.ttf
+          weight: 900
+        - asset: fonts/Montserrat-BlackItalic.ttf
+          style: italic
+          weight: 900
+
+    - family:  MyFlutterApp
+      fonts:
+      - asset: fonts/MyFlutterApp.ttf
