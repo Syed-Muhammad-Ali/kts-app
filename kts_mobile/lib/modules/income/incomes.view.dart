@@ -1,15 +1,13 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/routing/kts_routing_links.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
-import 'package:kts_mobile/common/theme/theme_styles.dart';
-import 'package:kts_mobile/modules/global/connectivity/no_internet_connection-warning.dart';
-import 'package:intl/intl.dart';
-import 'dart:async';
-import 'package:go_router/go_router.dart';
 
 class IncomesView extends StatefulWidget {
   final KtsBookingApi apiClient;
@@ -57,7 +55,7 @@ class _IncomesViewState extends State<IncomesView> {
               .toList();
           totalIncome = value.data!.totalIncomeSum;
           accoutingPeriodLabel =
-              "${dateFormatter.format(value.data!.accountingPeriod!.periodStartDate.toLocal())} to ${dateFormatter.format(value.data!.accountingPeriod!.periodEndDate.toLocal())}";
+              "${dateFormatter.format(value.data!.accountingPeriod!.periodStartDate.toLocal())} - ${dateFormatter.format(value.data!.accountingPeriod!.periodEndDate.toLocal())}";
         });
       }
       EasyLoading.dismiss();
@@ -109,7 +107,7 @@ class _IncomesViewState extends State<IncomesView> {
                       padding: EdgeInsets.only(top: 12, bottom: 12),
                       child: Text(
                         accoutingPeriodLabel != null
-                            ? "A look at current income for period $accoutingPeriodLabel"
+                            ? "Your income for the period $accoutingPeriodLabel"
                             : "",
                         style: TextStyle(
                             color: ThemeColors.light,
@@ -150,7 +148,8 @@ class _IncomesViewState extends State<IncomesView> {
                             onTap: (() => context.goNamed(
                                 KtsRoutingLinks.edit_income,
                                 params: {'id': income[index].id.toString()})),
-                            title: (Padding(
+                            title: (
+                              Padding(
                                 padding: EdgeInsets.only(bottom: 12),
                                 child: Container(
                                   decoration: BoxDecoration(

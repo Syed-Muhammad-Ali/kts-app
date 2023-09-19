@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -8,10 +9,10 @@ import 'package:kts_mobile/common/routing/kts_routing_links.dart';
 import 'package:kts_mobile/common/subscriptions/subscription-helper.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
 import 'package:kts_mobile/common/theme/theme_styles.dart';
+import 'package:kts_mobile/modules/account/components/signup/steps/signup-account/signup_account.view.dart';
 import 'package:kts_mobile/modules/account/components/signup/steps/signup-details/signup_details.view.dart';
 import 'package:kts_mobile/modules/account/components/signup/steps/signup-employment/signup_employment.view.dart';
 import 'package:kts_mobile/modules/account/components/signup/steps/signup-subscription/signup_subscription.view.dart';
-import 'package:kts_mobile/modules/account/components/signup/steps/signup-account/signup_account.view.dart';
 import 'package:kts_mobile/modules/account/components/signup/steps/signup-tax-return/signup_tax_return.view.dart';
 import 'package:kts_mobile/modules/global/connectivity/no_internet_connection-warning.dart';
 import 'package:kts_mobile/modules/global/error-handling/handle_error.dart';
@@ -224,17 +225,19 @@ class _SignupViewState extends State<SignupView> {
     );
 
     try {
+        print('if');
       var response = await widget.apiClient
           .getAccountReadApi()
           .accountReadAccountExists(email: signupDetailsData!.email);
           print("SignUp response: $response");
-      EasyLoading.dismiss();
+    EasyLoading.dismiss();
       if (response.data!.exists) {
         _showAccountExistsDialog(signupDetailsData!.email);
       }
       return !response.data!.exists;
     } on Exception catch (err) {
       EasyLoading.dismiss();
+      print('else');
       return false;
     }
   }

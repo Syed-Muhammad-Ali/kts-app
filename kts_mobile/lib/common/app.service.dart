@@ -51,8 +51,8 @@ class AppService {
     if (token.hasExpired()) {
       // token expired attempt refresh
       try {
-        token =
-            await AuthenticationService().renewAccessToken(token.refreshToken);
+        // token =
+        //     await AuthenticationService().renewAccessToken(token.refreshToken);
       } catch (err) {
         var t = "";
       }

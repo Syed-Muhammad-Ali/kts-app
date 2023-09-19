@@ -1,21 +1,17 @@
-import 'package:dio/dio.dart';
-import 'package:dotted_border/dotted_border.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/forms/input-formatters/decimal_text_input_formatter.dart';
 import 'package:kts_mobile/common/routing/kts_routing_links.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:kts_mobile/common/theme/theme_styles.dart';
 import 'package:kts_mobile/modules/global/connectivity/no_internet_connection-warning.dart';
-import 'package:intl/intl.dart';
-import 'dart:async';
-import 'package:collection/collection.dart';
 
 class IncomeView extends StatefulWidget {
   final KtsBookingApi apiClient;
@@ -61,6 +57,8 @@ class _IncomeViewState extends State<IncomeView> {
     } else {
       paymentDateController.clear();
     }
+    print("PaymentDate: ${_paymentDate!.toUtc()}");
+    print(paymentDateController.text);
   }
 
   IncomeDto? income;

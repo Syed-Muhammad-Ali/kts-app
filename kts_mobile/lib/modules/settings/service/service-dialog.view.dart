@@ -7,7 +7,6 @@ import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/forms/input-formatters/decimal_text_input_formatter.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
 import 'package:kts_mobile/common/theme/theme_styles.dart';
-import 'package:intl/intl.dart';
 import 'package:kts_mobile/modules/global/validation-error-prompt/validation-error-prompt.dart';
 
 class ServiceDialogView extends StatefulWidget {

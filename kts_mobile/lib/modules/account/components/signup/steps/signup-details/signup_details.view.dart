@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:intl/intl.dart';
 import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
 import 'package:kts_mobile/common/theme/theme_styles.dart';
-import 'package:intl/intl.dart';
 import 'package:kts_mobile/modules/global/info-prompt/info-prompt.dart';
 import 'package:kts_mobile/modules/global/info-prompts.dart';
 import 'package:kts_mobile/modules/settings/address/address-dialog.dart';
@@ -34,6 +34,9 @@ class SignupDetailsView extends StatefulWidget {
 class _SignupDetailsViewState extends State<SignupDetailsView> {
   final emailTextController = TextEditingController();
   final emailFocusNode = new FocusNode();
+
+  final confirmEmailTextController = TextEditingController();
+  final confirmEmailFocusNode = new FocusNode();
 
   final nameTextController = TextEditingController();
   final nameFocusNode = new FocusNode();
@@ -197,8 +200,31 @@ class _SignupDetailsViewState extends State<SignupDetailsView> {
               autofillHints: const [AutofillHints.name],
               controller: emailTextController,
               onEditingComplete: () {
-                nameFocusNode.requestFocus();
+                confirmEmailFocusNode.requestFocus();
               },
+            ),
+            SizedBox(height: 30),
+            TextFormField(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              focusNode: confirmEmailFocusNode,
+              textCapitalization: TextCapitalization.none,
+              validator: (val) =>
+                  MatchValidator(errorText: 'Email do not match.')
+                      .validateMatch(val ?? "", emailTextController.text),
+              // (val) =>
+              // MultiValidator(
+              //   RequiredValidator(errorText: "Confirm Email is required").validateMatch(
+              //                       val ?? "", passwordController.text),
+              //   //
+              // ),
+              style: KtsAppWidgetStyles.fieldTextStyle(),
+              decoration: KtsAppWidgetStyles.fieldInputDdecoration(
+                  'Confirm Email', 'Confirm your email address',
+                  suffixIcon: Icons.mail),
+              autofillHints: const [AutofillHints.name],
+              controller: confirmEmailTextController,
             ),
             SizedBox(height: 30),
             TextFormField(

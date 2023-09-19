@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/app.service.dart';
@@ -38,6 +37,10 @@ class _AccountViewState extends State<AccountView> {
         account.address!,
         account.nationalInsuranceNumber!,
         account.utr!);
+        
+      backStream.stream.listen((event) {
+      context.pop();
+    });
   }
 
   _save(SignupDetailsFormData data) {

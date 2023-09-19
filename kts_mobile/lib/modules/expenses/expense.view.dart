@@ -1,3 +1,8 @@
+// ignore_for_file: must_be_immutable
+
+import 'dart:async';
+
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -6,16 +11,14 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/forms/input-formatters/decimal_text_input_formatter.dart';
 import 'package:kts_mobile/common/routing/kts_routing_links.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:kts_mobile/common/theme/theme_styles.dart';
+import 'package:kts_mobile/modules/expenses/viewImage.dart';
 import 'package:kts_mobile/modules/global/connectivity/no_internet_connection-warning.dart';
-import 'package:intl/intl.dart';
-import 'dart:async';
-import 'package:collection/collection.dart';
 
 class ExpenseView extends StatefulWidget {
   final KtsBookingApi apiClient;
@@ -48,6 +51,8 @@ class _ExpenseViewState extends State<ExpenseView> {
   DateTime? _paymentDate = null;
   final TextEditingController paymentDateController = TextEditingController();
   final FocusNode paymentDateFocusNode = FocusNode();
+  bool isRecurringEnabled = false;
+  String recurrence = '';
   DateTime? get paymentDate {
     return _paymentDate;
   }
@@ -76,6 +81,8 @@ class _ExpenseViewState extends State<ExpenseView> {
   ExpenseDto? expense;
 
   String? fileName;
+  XFile? filePath;
+  List<XFile> imageFileList = [];
 
   @override
   void initState() {
@@ -158,6 +165,7 @@ class _ExpenseViewState extends State<ExpenseView> {
           .accountWriteUploadFile(
               formFile: MultipartFile.fromBytes(bytes, filename: file!.name));
       recieptId = response.data != null ? response.data!.id : null;
+      print("accountWriteUploadFile : $response");
     }
 
     EasyLoading.show(
@@ -273,28 +281,44 @@ class _ExpenseViewState extends State<ExpenseView> {
         source: ImageSource.gallery,
         imageQuality: imageQuality,
         maxWidth: imageMaxWidth);
+    filePath = file;
+     
     if (file != null) {
       setState(() {
         fileName = file!.name;
+        file = filePath;
+       imageFileList.add(file!);
       });
+      print("fileName : $fileName");
     }
   }
 
-  Future launchCamera() async {
-    file = await _picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: imageQuality,
-        maxWidth: imageMaxWidth);
-    if (file != null) {
-      setState(() {
-        fileName = file!.name;
-      });
-    }
-  }
+Future<void> launchCamera() async {
+  file = await _picker.pickImage(
+    source: ImageSource.camera,
+    imageQuality: imageQuality,
+    maxWidth: imageMaxWidth,
+  );
 
-  removeFile() {
+  if (file != null) {
     setState(() {
-      file = null;
+      fileName = file!.name;
+      filePath = file; // Set filePath to the selected file
+      imageFileList.add(file!);
+    });
+  }
+}
+
+  removeFile(int index) {
+    setState(() {
+      // file = null;
+      // fileName = null;
+       imageFileList.removeAt(index);
+    });
+  }
+  void clearSelectedFiles() {
+    setState(() {
+      imageFileList.clear();
       fileName = null;
     });
   }
@@ -389,7 +413,7 @@ class _ExpenseViewState extends State<ExpenseView> {
                           padding: EdgeInsets.only(bottom: 12),
                           child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SizedBox(
                                     width: 30,
@@ -410,7 +434,7 @@ class _ExpenseViewState extends State<ExpenseView> {
                                       color: ThemeColors.lightPink,
                                       fontSize: 28,
                                       fontWeight: FontWeight.w500),
-                                )
+                                ),
                               ])),
                       Padding(
                           padding: EdgeInsets.only(top: 12, bottom: 12),
@@ -423,6 +447,140 @@ class _ExpenseViewState extends State<ExpenseView> {
                                 fontSize: 14,
                                 fontWeight: FontWeight.w300),
                           )),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Recurring Expense",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: ThemeColors.light,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w300),
+                          ),
+                          Switch(
+                            value: isRecurringEnabled,
+                            onChanged: (value) {
+                              setState(() {
+                                isRecurringEnabled = value;
+                              });
+                            },
+                            activeTrackColor: ThemeColors.darkPink,
+                            activeColor: ThemeColors.darkPink,
+                            inactiveTrackColor: ThemeColors.grey10,
+                          ),
+                        ],
+                      ),
+                      Visibility(
+                        visible: isRecurringEnabled,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                Radio(
+                                  fillColor: MaterialStateProperty.all(
+                                      recurrence == 'Weekly'
+                                          ? ThemeColors.darkPink
+                                          : ThemeColors.light),
+                                  value: 'Weekly',
+                                  groupValue: recurrence,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      recurrence = value!;
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  'Weekly',
+                                  style: TextStyle(
+                                    color: recurrence == 'Weekly'
+                                        ? ThemeColors.lightPink
+                                        : ThemeColors.light,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Radio(
+                                  fillColor: MaterialStateProperty.all(
+                                      recurrence == 'Fortnightly'
+                                          ? ThemeColors.darkPink
+                                          : ThemeColors.light),
+                                  value: 'Fortnightly',
+                                  groupValue: recurrence,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      recurrence = value!;
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  'Fortnightly',
+                                  style: TextStyle(
+                                    color: recurrence == 'Fortnightly'
+                                        ? ThemeColors.lightPink
+                                        : ThemeColors.light,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Radio(
+                                  fillColor: MaterialStateProperty.all(
+                                      recurrence == 'Monthly'
+                                          ? ThemeColors.darkPink
+                                          : ThemeColors.light),
+                                  value: 'Monthly',
+                                  groupValue: recurrence,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      recurrence = value!;
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  'Monthly',
+                                  style: TextStyle(
+                                    color: recurrence == 'Monthly'
+                                        ? ThemeColors.lightPink
+                                        : ThemeColors.light,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Radio(
+                                  fillColor: MaterialStateProperty.all(
+                                      recurrence == 'Quarterly'
+                                          ? ThemeColors.darkPink
+                                          : ThemeColors.light),
+                                  value: 'Quarterly',
+                                  groupValue: recurrence,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      recurrence = value!;
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  'Quarterly',
+                                  style: TextStyle(
+                                    color: recurrence == 'Quarterly'
+                                        ? ThemeColors.lightPink
+                                        : ThemeColors.light,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20),
                       Form(
                         key: formKey,
                         child: Column(children: [
@@ -601,141 +759,212 @@ class _ExpenseViewState extends State<ExpenseView> {
                             controller: paymentNotesController,
                           ),
                           const SizedBox(height: 24),
+                          // fileName != null
+                          //     ?
+                          //     :
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: Container(
+                                height: 80,
+                                child: DottedBorder(
+                                  color: ThemeColors.grey11,
+                                  borderType: BorderType.RRect,
+                                  radius: Radius.circular(15),
+                                  strokeWidth: 1,
+                                  dashPattern: [6, 4],
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        TextButton(
+                                          child: Column(
+                                            children: [
+                                              Icon(
+                                                  KtsCustomAppIcons.file_upload,
+                                                  color: ThemeColors.grey11,
+                                                  size: 24),
+                                              SizedBox(height: 6),
+                                              Text(
+                                                "Attach a file",
+                                                style: TextStyle(
+                                                    color: ThemeColors.light,
+                                                    fontFamily:
+                                                        KtsAppWidgetStyles
+                                                            .fontFamily,
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                            ],
+                                          ),
+                                          onPressed: () async {
+                                            await selectFile();
+                                          },
+                                        )
+                                      ]),
+                                ),
+                              )),
+                              SizedBox(width: 8),
+                              Expanded(
+                                  child: Container(
+                                height: 80,
+                                child: DottedBorder(
+                                  color: ThemeColors.grey11,
+                                  borderType: BorderType.RRect,
+                                  radius: Radius.circular(15),
+                                  strokeWidth: 1,
+                                  dashPattern: [6, 4],
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        TextButton(
+                                          child: Column(
+                                            children: [
+                                               Icon(
+                                                  KtsCustomAppIcons.file_upload,
+                                                  color: ThemeColors.grey11,
+                                                  size: 24),
+                                              SizedBox(height: 6),
+                                              Text(
+                                                "OCR Scan",
+                                                style: TextStyle(
+                                                    color: ThemeColors.light,
+                                                    fontFamily:
+                                                        KtsAppWidgetStyles
+                                                            .fontFamily,
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                            ],
+                                          ),
+                                          onPressed: () async {
+                                            await launchCamera();
+                                          },
+                                        )
+                                      ]),
+                                ),
+                              )),
+                              SizedBox(width: 8),
+                              Expanded(
+                                  child: Container(
+                                height: 80,
+                                child: DottedBorder(
+                                  color: ThemeColors.grey11,
+                                  borderType: BorderType.RRect,
+                                  radius: Radius.circular(15),
+                                  strokeWidth: 1,
+                                  dashPattern: [6, 4],
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        TextButton(
+                                          child: Column(
+                                            children: [
+                                              Icon(
+                                                  KtsCustomAppIcons.add_a_photo,
+                                                  color: ThemeColors.grey11,
+                                                  size: 28),
+                                              SizedBox(height: 6),
+                                              Text(
+                                                "Take a photo",
+                                                style: TextStyle(
+                                                    color: ThemeColors.light,
+                                                    fontFamily:
+                                                        KtsAppWidgetStyles
+                                                            .fontFamily,
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                            ],
+                                          ),
+                                          onPressed: () async {
+                                            await launchCamera();
+                                          },
+                                        )
+                                      ]),
+                                ),
+                              )),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
                           fileName != null
                               ? Column(
                                   children: [
                                     Icon(KtsCustomAppIcons.file_upload,
                                         color: ThemeColors.darkPink, size: 24),
                                     SizedBox(height: 6),
-                                    Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                              width: 20,
-                                              height: 20,
-                                              child: IconButton(
-                                                  padding: EdgeInsets.all(0),
-                                                  iconSize: 20,
-                                                  onPressed: () => removeFile(),
-                                                  icon: Icon(Icons.close,
-                                                      color: ThemeColors.error,
-                                                      size: 20))),
-                                          Expanded(
-                                              child: Text(
-                                            fileName!,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(
-                                                color: ThemeColors.light,
-                                                fontFamily: KtsAppWidgetStyles
-                                                    .fontFamily,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w400),
-                                          )),
-                                        ])
+                                   ListView.builder(
+                                     physics: const NeverScrollableScrollPhysics(),
+                              padding: const EdgeInsets.all(0),
+                              itemCount:imageFileList.length,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                        return ListTile(
+                                           contentPadding: EdgeInsets.all(0),
+                                        onTap: () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ViewImageScreen(),
+      settings: RouteSettings(arguments: {'path': imageFileList[index].path}),
+    ),
+  );
+},
+
+                                         title:Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(
+                                                      width: 20,
+                                                      height: 20,
+                                                      child: IconButton(
+                                                          padding: EdgeInsets.all(0),
+                                                          iconSize: 20,
+                                                          onPressed: () => removeFile(index),
+                                                          icon: Icon(Icons.close,
+                                                              color: ThemeColors.error,
+                                                              size: 20))),
+                                                  Expanded(
+                                                      // child: Image.file(File(imageFileList[index].path), fit: BoxFit.cover),
+                                                      child: Text(
+                                                   imageFileList[index].name,
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                      color: ThemeColors.light,
+                                                      fontFamily:
+                                                          KtsAppWidgetStyles.fontFamily,
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                  ),
+                                                ]),
+                                          ),
+                                          
+                                        );
+                                      }
+                                    ),
                                   ],
                                 )
-                              : Row(
-                                  children: [
-                                    Expanded(
-                                        child: Container(
-                                      height: 80,
-                                      child: DottedBorder(
-                                        color: ThemeColors.grey11,
-                                        borderType: BorderType.RRect,
-                                        radius: Radius.circular(15),
-                                        strokeWidth: 1,
-                                        dashPattern: [6, 4],
-                                        child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              TextButton(
-                                                child: Column(
-                                                  children: [
-                                                    Icon(
-                                                        KtsCustomAppIcons
-                                                            .file_upload,
-                                                        color:
-                                                            ThemeColors.grey11,
-                                                        size: 24),
-                                                    SizedBox(height: 6),
-                                                    Text(
-                                                      "Attach a file",
-                                                      style: TextStyle(
-                                                          color:
-                                                              ThemeColors.light,
-                                                          fontFamily:
-                                                              KtsAppWidgetStyles
-                                                                  .fontFamily,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w400),
-                                                    ),
-                                                  ],
-                                                ),
-                                                onPressed: () async {
-                                                  await selectFile();
-                                                },
-                                              )
-                                            ]),
-                                      ),
-                                    )),
-                                    SizedBox(width: 12),
-                                    Expanded(
-                                        child: Container(
-                                      height: 80,
-                                      child: DottedBorder(
-                                        color: ThemeColors.grey11,
-                                        borderType: BorderType.RRect,
-                                        radius: Radius.circular(15),
-                                        strokeWidth: 1,
-                                        dashPattern: [6, 4],
-                                        child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              TextButton(
-                                                child: Column(
-                                                  children: [
-                                                    Icon(
-                                                        KtsCustomAppIcons
-                                                            .add_a_photo,
-                                                        color:
-                                                            ThemeColors.grey11,
-                                                        size: 28),
-                                                    SizedBox(height: 6),
-                                                    Text(
-                                                      "Take a photo",
-                                                      style: TextStyle(
-                                                          color:
-                                                              ThemeColors.light,
-                                                          fontFamily:
-                                                              KtsAppWidgetStyles
-                                                                  .fontFamily,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w400),
-                                                    ),
-                                                  ],
-                                                ),
-                                                onPressed: () async {
-                                                  await launchCamera();
-                                                },
-                                              )
-                                            ]),
-                                      ),
-                                    )),
-                                  ],
-                                ),
+                              : SizedBox(),
                           const SizedBox(height: 12),
                         ]),
                       ),

@@ -2,12 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+
 import 'app.dart';
 import 'common/config/kts_environment.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
+List<AppointmentDto> totalAppointment=[];
 void main() async {
   const String environment = String.fromEnvironment(
     'ENVIRONMENT',

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kts_mobile/common/theme/theme_colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kts_mobile/common/theme/theme_colors.dart';
 
 class KtsAppWidgetStyles {
   static final KtsAppWidgetStyles _style = KtsAppWidgetStyles._internal();
@@ -78,7 +78,9 @@ class KtsAppWidgetStyles {
                     suffixIcon, suffixIconSize, showInfo, showInfoCalback),
               )
             : null,
-        prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null);
+        prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null
+        
+        );
   }
 
   static TextStyle fieldTextStyle() {
@@ -193,4 +195,6 @@ class KtsCustomAppIcons {
       IconData(0xf576, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData tools =
       IconData(0xf7d9, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData ocr =
+      IconData(0xf785, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

@@ -1,15 +1,9 @@
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:kts_booking_api/kts_booking_api.dart';
-import 'package:kts_mobile/common/routing/kts_routing_links.dart';
-import 'package:kts_mobile/common/theme/theme_colors.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
-import 'package:kts_mobile/common/theme/theme_styles.dart';
-import 'package:kts_mobile/modules/global/connectivity/no_internet_connection-warning.dart';
-import 'package:intl/intl.dart';
 import 'dart:async';
-import 'package:go_router/go_router.dart';
+
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:kts_booking_api/kts_booking_api.dart';
+import 'package:kts_mobile/common/theme/theme_colors.dart';
 
 class SummariesView extends StatefulWidget {
   final KtsBookingApi apiClient;
@@ -95,15 +89,41 @@ class _SummariesViewState extends State<SummariesView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                      padding: EdgeInsets.only(bottom: 0),
-                      child: Text(
-                        "Summaries",
-                        style: TextStyle(
-                            color: ThemeColors.lightPink,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w500),
-                      )),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.only(bottom: 0),
+                          child: Text(
+                            "Summaries",
+                            style: TextStyle(
+                                color: ThemeColors.lightPink,
+                                fontSize: 28,
+                                fontWeight: FontWeight.w500),
+                          )),
+                      Container(
+                        width: 100,
+                        height: 20,
+                        decoration: const BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20)),
+                            color: ThemeColors.darkPink),
+                        child: Center(
+                          child: Text("Export Summary",
+                              style: const TextStyle(
+                                  color: ThemeColors.darkText,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 10)),
+                        ),
+                        //  Icon(
+                        //   getCategoryIcon(
+                        //       expenseByCategory[index]
+                        //           .category),
+                        //   color: ThemeColors.darkText,
+                        // ),
+                      ),
+                    ],
+                  ),
                   Padding(
                       padding: EdgeInsets.only(top: 12, bottom: 12),
                       child: Text(
@@ -113,6 +133,81 @@ class _SummariesViewState extends State<SummariesView> {
                             fontSize: 14,
                             fontWeight: FontWeight.w300),
                       )),
+                  ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(8),
+                      itemCount: 7,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                            contentPadding: EdgeInsets.all(0),
+                            // onTap: (() => context.pushNamed(
+                            //         KtsRoutingLinks.expenses,
+                            //         params: {
+                            //           'categoryId': expenseByCategory[index]
+                            //               .category!
+                            //               .id
+                            //               .toString()
+                            //         })),
+                            
+                            title: (
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 12),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(15)),
+                                      color: ThemeColors.darkGrey),
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20,
+                                          top: 16,
+                                          right: 20,
+                                          bottom: 16),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                                child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Tax Liability"
+                                                  //      ??
+                                                  // "-"
+                                                  ,
+                                                  textAlign: TextAlign.start,
+                                                  style: const TextStyle(
+                                                    color: ThemeColors.light,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 14,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 2,
+                                                ),
+                                              ],
+                                            )),
+                                            const SizedBox(width: 12),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text("£28,255.07",
+                                                    // ${currencyFormatter.format(expenseByCategory[index].total)}
+
+                                                    style: const TextStyle(
+                                                        color: ThemeColors
+                                                            .darkPink,
+                                                        fontWeight:
+                                                            FontWeight.w700)),
+                                              ],
+                                            )
+                                          ])),
+                                ))));
+                      }),
                 ],
               ))
         ])),

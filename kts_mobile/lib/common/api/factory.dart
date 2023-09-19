@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/config/kts_environment.dart';
-import 'package:kts_mobile/common/identity/services/authentication.service.dart';
 import 'package:kts_mobile/common/identity/services/token.provider.dart';
 
 Dio createDio(BaseOptions baseConfiguration) {
@@ -83,8 +82,8 @@ class UnAuthroisedInterceptor extends Interceptor {
     if (err.response != null && err.response!.statusCode == 401) {
       var token = await TokenProvider().getToken();
       if (token != null) {
-        token =
-            await AuthenticationService().renewAccessToken(token.refreshToken);
+        // token =
+        //     await AuthenticationService().renewAccessToken(token.refreshToken);
         await TokenProvider().setToken(token);
         return handler.resolve(await _retry(err.requestOptions));
       }

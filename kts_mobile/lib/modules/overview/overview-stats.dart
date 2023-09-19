@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:kts_booking_api/kts_booking_api.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
-
+import 'package:intl/intl.dart';
+import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
 import 'package:kts_mobile/common/theme/theme_styles.dart';
-import 'package:intl/intl.dart';
 
 class OverviewStats extends StatelessWidget {
   OverviewStats(this.stats, {Key? key}) : super(key: key);
@@ -99,7 +97,7 @@ class OverviewStats extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Tax to date",
+                        Text("Tax and NI for year",
                             style: TextStyle(
                                 color: ThemeColors.darkPink,
                                 fontFamily: KtsAppWidgetStyles.fontFamily,
@@ -228,7 +226,7 @@ class OverviewStats extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Profit to date",
+                        Text("Profit to year",
                             style: TextStyle(
                                 color: ThemeColors.darkPink,
                                 fontFamily: KtsAppWidgetStyles.fontFamily,
@@ -322,7 +320,7 @@ class OverviewStats extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Income to date",
+                        Text("Income to year",
                             style: TextStyle(
                                 color: ThemeColors.darkPink,
                                 fontFamily: KtsAppWidgetStyles.fontFamily,
@@ -396,7 +394,7 @@ class OverviewStats extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Expense to date",
+                        Text("Expense to year",
                             style: TextStyle(
                                 color: ThemeColors.darkPink,
                                 fontFamily: KtsAppWidgetStyles.fontFamily,

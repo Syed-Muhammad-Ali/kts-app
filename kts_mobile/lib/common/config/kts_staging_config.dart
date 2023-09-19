@@ -5,7 +5,9 @@ import 'kts_base_config.dart';
 class KtsStagingConfig implements KtsBaseConfig {
   @override
   // String get apiHost => "http://127.0.0.1:5000";
-  String get apiHost => "https://kts-prod-api.azurewebsites.net";
+  // String get apiHost => "https://kts-prod-api.azurewebsites.net";
+  String get apiHost => "https://kts-php-staging.azurewebsites.net";
+  // String get apiHost => "https://kts-stage-api.azurewebsites.net";
 
   @override
   String get apiIdentityServer => "";

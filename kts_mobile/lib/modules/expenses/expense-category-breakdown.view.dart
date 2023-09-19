@@ -1,13 +1,13 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/routing/kts_routing_links.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
-import 'package:intl/intl.dart';
-import 'dart:async';
-import 'package:go_router/go_router.dart';
 import 'package:kts_mobile/common/theme/theme_styles.dart';
 
 class ExpensesCategoryBreakdownView extends StatefulWidget {
@@ -63,7 +63,7 @@ class _ExpensesCategoryBreakdownViewState
               .map((e) => e.total)
               .reduce((value, element) => value + element);
           accoutingPeriodLabel =
-              "${dateFormatter.format(value.data!.period!.periodStartDate.toLocal())} to ${dateFormatter.format(value.data!.period!.periodEndDate.toLocal())}";
+              "${dateFormatter.format(value.data!.period!.periodStartDate.toLocal())} - ${dateFormatter.format(value.data!.period!.periodEndDate.toLocal())}";
         });
       }
       EasyLoading.dismiss();
@@ -163,7 +163,7 @@ class _ExpensesCategoryBreakdownViewState
                       padding: EdgeInsets.only(top: 12, bottom: 12),
                       child: Text(
                         accoutingPeriodLabel != null
-                            ? "A look at current spending for period $accoutingPeriodLabel"
+                            ? "Your spending for the period $accoutingPeriodLabel"
                             : "",
                         style: TextStyle(
                             color: ThemeColors.light,

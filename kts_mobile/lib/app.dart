@@ -19,10 +19,10 @@ class KtsApp extends StatelessWidget {
             DeviceOrientation.portraitDown,
           ]);
           return MaterialApp.router(
-            debugShowCheckedModeBanner: false,
             routerConfig: KtsRouteConfigurator.getConfig(snapshot.data != null),
             theme: KtsTheme.themeData,
             builder: EasyLoading.init(),
+            debugShowCheckedModeBanner: false,
           );
         });
   }

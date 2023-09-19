@@ -1,3 +1,5 @@
+// ignore_for_file: dead_code, unused_element
+
 import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -289,7 +291,8 @@ class _ExpensesViewState extends State<ExpensesView> {
                                           widget.categoryId.toString(),
                                       'id': expenses[index].id.toString()
                                     })),
-                            title: (Padding(
+                            title: (
+                              Padding(
                                 padding: EdgeInsets.only(bottom: 12),
                                 child: Container(
                                   decoration: BoxDecoration(

@@ -52,7 +52,7 @@ class AccountReadApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/AccountRead/account-exists/:email';
+    final _path = r'/api/AccountRead/account-exists/';
     final _options = Options(
       method: r'GET',
       headers: <String, dynamic>{
@@ -77,7 +77,7 @@ class AccountReadApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
-    print("Email is required:$_response");
+    print("account-exists :$_response");
 
     AccountExistsResponse _responseData;
 
@@ -151,7 +151,7 @@ class AccountReadApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
-    print("Account Details : $_response");
+    print("Account  : $_response");
 
     GetAccountResponse _responseData;
 
@@ -207,7 +207,7 @@ class AccountReadApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/AccountRead/notifications';
+    final _path = r'/api/AccountRead/notification';
     final _options = Options(
       method: r'GET',
       headers: <String, dynamic>{
@@ -232,7 +232,7 @@ class AccountReadApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
-    print("Notification Details : $_response");
+    print("Notification : $_response");
 
     GetAccountNotificationsResponse _responseData;
 
@@ -388,7 +388,7 @@ class AccountReadApi {
       if (start != null) r'start': encodeQueryParameter(_serializers, start, const FullType(DateTime)),
       if (end != null) r'end': encodeQueryParameter(_serializers, end, const FullType(DateTime)),
     };
-
+    print(_queryParameters);
     final _response = await _dio.request<Object>(
       _path,
       options: _options,
@@ -397,7 +397,7 @@ class AccountReadApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
-    print("Apponiments Details : $_response");
+    print("appointments : $_response");
 
     GetAppointmentResponse _responseData;
 
@@ -478,7 +478,7 @@ class AccountReadApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
-    print("Account Expense Details : $_response");
+    print("init-account-expenses : $_response");
 
     InitAccountExpenseResponse _responseData;
 
@@ -634,7 +634,7 @@ class AccountReadApi {
       if (categoryId != null) r'categoryId': encodeQueryParameter(_serializers, categoryId, const FullType(int)),
       r'accountingPeriodId': encodeQueryParameter(_serializers, accountingPeriodId, const FullType(int)),
     };
-
+  print(_queryParameters);
     final _response = await _dio.request<Object>(
       _path,
       options: _options,
@@ -643,7 +643,7 @@ class AccountReadApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
-    print("Account expense by catergories Details : $_response");
+    print("Account expense for catergories Details : $_response");
 
     InitAccountExpensesResponse _responseData;
 
@@ -724,7 +724,7 @@ class AccountReadApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
-    print("Account Income Details : $_response");
+    print("init-account-income : $_response");
 
     InitAccountIncomeResponse _responseData;
 
@@ -805,7 +805,7 @@ class AccountReadApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
-    print("Account Income Details : $_response");
+    print("init-account-incomes : $_response");
 
     InitAccountIncomesResponse _responseData;
 
@@ -877,7 +877,7 @@ class AccountReadApi {
     final _queryParameters = <String, dynamic>{
       r'appointmentId': encodeQueryParameter(_serializers, appointmentId, const FullType(int)),
     };
-
+      print("init-appointment _queryParameters: $_queryParameters");
     final _response = await _dio.request<Object>(
       _path,
       options: _options,
@@ -886,7 +886,7 @@ class AccountReadApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
-    print("Account Expense Details : $_response");
+    print("init-appointment : $_response");
 
     InitAppointmentResponse _responseData;
 
@@ -960,6 +960,7 @@ class AccountReadApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+    print("init-customers : $_response");
 
     InitCustomersResponse _responseData;
 
@@ -1033,6 +1034,7 @@ class AccountReadApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+    print("init-services : $_response");
 
     InitServicesResponse _responseData;
 
@@ -1104,7 +1106,6 @@ class AccountReadApi {
     final _queryParameters = <String, dynamic>{
       r'versionLabel': encodeQueryParameter(_serializers, versionLabel, const FullType(String)),
     };
-    print("QueryParemeters :$_queryParameters");
 
     final _response = await _dio.request<Object>(
       _path,
@@ -1114,14 +1115,12 @@ class AccountReadApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
-    print(" Hello: $_response");
+    print("should-update : $_response");
 
     bool _responseData;
 
     try {
       _responseData = _response.data as bool;
-      print("Response Data: $_responseData");
-
     } catch (error, stackTrace) {
       throw DioError(
         requestOptions: _response.requestOptions,

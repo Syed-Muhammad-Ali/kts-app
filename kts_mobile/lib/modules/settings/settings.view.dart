@@ -1,16 +1,17 @@
-import 'package:dio/dio.dart';
+
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/app.service.dart';
 import 'package:kts_mobile/common/routing/kts_routing_links.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:kts_mobile/common/theme/theme_styles.dart';
-import 'package:kts_mobile/modules/global/connectivity/no_internet_connection-warning.dart';
-import 'package:intl/intl.dart';
-import 'dart:async';
-import 'package:go_router/go_router.dart';
+import 'package:rating_dialog/rating_dialog.dart';
+import 'package:store_redirect/store_redirect.dart';
 
 class SettingsView extends StatefulWidget {
   final KtsBookingApi apiClient;
@@ -102,6 +103,43 @@ class _SettingsViewState extends State<SettingsView> {
       });
     }, onError: (error) => EasyLoading.dismiss());
   }
+final _dialog = RatingDialog(
+  
+    // your app's name?
+    title:  Text("Rate Us!",
+    style: TextStyle(
+    fontSize:18,
+    fontWeight: FontWeight.w500
+     ),
+     textAlign: TextAlign.center,
+    ),
+    // encourage your user to leave a high rating?
+    message:
+   const Text('Select Number of Stars 1 - 5 to Rate This App',
+   style: TextStyle(
+    fontSize:15,
+    fontWeight: FontWeight.w500
+   ),
+   textAlign: TextAlign.center,
+   ),
+    // your app's logo?
+     image: Image.asset("images/app/kts-icon_background.png",
+     width: 50,
+     height: 50,
+     ),
+    submitButtonText: 'Submit',
+    onCancelled: () => print('cancelled'),
+    onSubmitted: (response) {
+      print('rating: ${response.rating}, comment: ${response.comment}');
+      if (response.rating < 3.0) {
+        // send their comments to your email or anywhere you wish
+        // ask the user to contact you instead of leaving a bad review
+      } else {
+        //go to app store
+        StoreRedirect.redirect(androidAppId: 'co.uk.ktsbookkeeping',iOSAppId: 'co.uk.ktsbookkeeping');
+      }
+    },
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +313,7 @@ class _SettingsViewState extends State<SettingsView> {
                             ])),
                   ))),
           Padding(
-              padding: EdgeInsets.only(left: 18, right: 18),
+             padding: EdgeInsets.only(left: 18, right: 18, bottom: 12),
               child: GestureDetector(
                   onTap: () {
                     context.goNamed(KtsRoutingLinks.change_password);
@@ -291,6 +329,38 @@ class _SettingsViewState extends State<SettingsView> {
                             children: [
                               Text(
                                 "Change Password",
+                                style: TextStyle(
+                                    color: ThemeColors.lightPink,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              Icon(
+                                Icons.arrow_forward,
+                                color: ThemeColors.darkPink,
+                                size: 24,
+                              )
+                            ])),
+                  ))),
+                   Padding(
+              padding: EdgeInsets.only(left: 18, right: 18),
+              child: GestureDetector(
+                  onTap: () {
+                    showDialog(
+              context: context,
+              builder: (context) => _dialog,
+            );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        color: ThemeColors.darkGrey),
+                    child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Rate Us",
                                 style: TextStyle(
                                     color: ThemeColors.lightPink,
                                     fontSize: 16,

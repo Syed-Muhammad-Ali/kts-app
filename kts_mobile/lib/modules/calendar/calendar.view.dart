@@ -1,15 +1,19 @@
+// ignore_for_file: unused_element
+
+import 'dart:async';
+
 import 'package:dart_date/dart_date.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/routing/kts_routing_links.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:kts_mobile/common/theme/theme_styles.dart';
-import 'package:intl/intl.dart';
-import 'dart:async';
+import 'package:kts_mobile/main.dart';
+import 'package:kts_mobile/modules/calendar/search.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
@@ -221,6 +225,7 @@ class _CalendarViewState extends State<CalendarView> {
         .then((value) {
       if (value.data != null && value.data!.appointments != null) {
         monthAppointments = value.data!.appointments!.toList(growable: true);
+        totalAppointment = value.data!.appointments!.toList(growable: true);
         setState(() {
           _setSelectedDayAppointments();
         });
@@ -358,6 +363,43 @@ class _CalendarViewState extends State<CalendarView> {
                                     }).toList(),
                                   )),
                             ])),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const searchScreen()));
+                      },
+                      child: Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25)),
+                              color: ThemeColors.darkGrey),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 5),
+                                child: Icon(
+                                  Icons.search,
+                                  color: ThemeColors.darkPink,
+                                  size: 24,
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                "Search Appoinment",
+                                style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontFamily: "Montserrat",
+                                    color: ThemeColors.grey10,
+                                    fontWeight: FontWeight.w400),
+                              )
+                            ],
+                          ),
+                          ),
+                    ),
                     SizedBox(
                       height: 50,
                       child: ListView.separated(

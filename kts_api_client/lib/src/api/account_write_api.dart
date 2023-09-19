@@ -6,9 +6,6 @@ import 'dart:async';
 
 import 'package:built_value/serializer.dart';
 import 'package:dio/dio.dart';
-
-import 'package:kts_booking_api/src/api_util.dart';
-import 'package:kts_booking_api/src/model/app_fac_problem_details.dart';
 import 'package:kts_booking_api/src/model/cancel_appointment_request.dart';
 import 'package:kts_booking_api/src/model/change_password_request.dart';
 import 'package:kts_booking_api/src/model/create_appointment_request.dart';
@@ -93,7 +90,7 @@ class AccountWriteApi {
     try {
       const _type = FullType(CancelAppointmentRequest);
       _bodyData = _serializers.serialize(request, specifiedType: _type);
-
+    print(request);
     } catch(error, stackTrace) {
       throw DioError(
          requestOptions: _options.compose(
@@ -114,6 +111,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+     print("Appointments Canncel :$_response");
 
     bool _responseData;
 
@@ -184,7 +182,7 @@ class AccountWriteApi {
     try {
       const _type = FullType(ChangePasswordRequest);
       _bodyData = _serializers.serialize(request, specifiedType: _type);
-
+    print("AccountWrite/change-password Request: $request");
     } catch(error, stackTrace) {
       throw DioError(
          requestOptions: _options.compose(
@@ -205,6 +203,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+    print("Change-password : $_response");
 
     bool _responseData;
 
@@ -275,7 +274,7 @@ class AccountWriteApi {
     try {
       const _type = FullType(CreateAppointmentRequest);
       _bodyData = _serializers.serialize(request, specifiedType: _type);
-
+      print("Appointment Resquest :$request");
     } catch(error, stackTrace) {
       throw DioError(
          requestOptions: _options.compose(
@@ -296,6 +295,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+     print("Appointment : $_response");
 
     CreateAppointmentResponse _responseData;
 
@@ -370,7 +370,7 @@ class AccountWriteApi {
     try {
       const _type = FullType(CreateCustomerRequest);
       _bodyData = _serializers.serialize(request, specifiedType: _type);
-
+    print("request : $request");
     } catch(error, stackTrace) {
       throw DioError(
          requestOptions: _options.compose(
@@ -391,6 +391,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+    print("Customers : $_response");
 
     CreateCusotmerResponse _responseData;
 
@@ -465,7 +466,7 @@ class AccountWriteApi {
     try {
       const _type = FullType(CreateExpenseRequest);
       _bodyData = _serializers.serialize(request, specifiedType: _type);
-
+    print(request);
     } catch(error, stackTrace) {
       throw DioError(
          requestOptions: _options.compose(
@@ -486,6 +487,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+     print("Expense : $_response");
 
     CreateExpenseResponse _responseData;
 
@@ -560,7 +562,7 @@ class AccountWriteApi {
     try {
       const _type = FullType(CreateIncomeRequest);
       _bodyData = _serializers.serialize(request, specifiedType: _type);
-
+     print("AccountWrite/income Request: $request");
     } catch(error, stackTrace) {
       throw DioError(
          requestOptions: _options.compose(
@@ -581,6 +583,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+     print("Income : $_response");
 
     CreateIncomeResponse _responseData;
 
@@ -676,6 +679,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+     print("Services : $_response");
 
     CreateServiceResponse _responseData;
 
@@ -749,6 +753,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+     print("Delete : $_response");
 
     bool _responseData;
 
@@ -819,7 +824,7 @@ class AccountWriteApi {
     try {
       const _type = FullType(DeleteCustomerRequest);
       _bodyData = _serializers.serialize(request, specifiedType: _type);
-
+    print("Customers Request :$request");
     } catch(error, stackTrace) {
       throw DioError(
          requestOptions: _options.compose(
@@ -840,6 +845,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+     print("Customers : $_response");
 
     bool _responseData;
 
@@ -931,6 +937,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+     print("AccountWrite/expense Delete : $_response");
 
     bool _responseData;
 
@@ -1022,6 +1029,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+     print("AccountWrite/income Delete : $_response");
 
     bool _responseData;
 
@@ -1113,6 +1121,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+     print("services Delete  : $_response");
 
     bool _responseData;
 
@@ -1183,7 +1192,7 @@ class AccountWriteApi {
     try {
       const _type = FullType(ForgotPasswordRequest);
       _bodyData = _serializers.serialize(request, specifiedType: _type);
-
+   
     } catch(error, stackTrace) {
       throw DioError(
          requestOptions: _options.compose(
@@ -1204,6 +1213,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+     print("Forget Password : $_response");
 
     bool _responseData;
 
@@ -1295,6 +1305,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+     print("notifications/set-read : $_response");
 
     bool _responseData;
 
@@ -1386,6 +1397,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+     print("SignUp Data : $_response");
 
     SignupResponse _responseData;
 
@@ -1460,7 +1472,7 @@ class AccountWriteApi {
     try {
       const _type = FullType(UpdateAccountRequest);
       _bodyData = _serializers.serialize(request, specifiedType: _type);
-
+    print(request);
     } catch(error, stackTrace) {
       throw DioError(
          requestOptions: _options.compose(
@@ -1481,6 +1493,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+    print("accountWriteUpdateAccoun : $_response");
 
     UpdateAccountResponse _responseData;
 
@@ -1555,7 +1568,7 @@ class AccountWriteApi {
     try {
       const _type = FullType(UpdateAppointmentRequest);
       _bodyData = _serializers.serialize(request, specifiedType: _type);
-
+    print(request);
     } catch(error, stackTrace) {
       throw DioError(
          requestOptions: _options.compose(
@@ -1576,6 +1589,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+     print("AccountWrite/appointment : $_response");
 
     UpdateAppointmentResponse _responseData;
 
@@ -1671,6 +1685,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+    print("AccountWrite/customers : $_response");
 
     UpdateCusotmerResponse _responseData;
 
@@ -1766,6 +1781,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+    print("AccountWrite/expense : $_response");
 
     UpdateExpenseResponse _responseData;
 
@@ -1861,6 +1877,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+    print("AccountWrite/income Update : $_response");
 
     UpdateIncomeResponse _responseData;
 
@@ -1956,6 +1973,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+    print("AccountWrite/services : $_response");
 
     UpdateServiceResponse _responseData;
 
@@ -2031,6 +2049,8 @@ class AccountWriteApi {
       _bodyData = FormData.fromMap(<String, dynamic>{
         r'formFile': formFile,
       });
+      print("bodyData : $_bodyData");
+      print("FormFile: $formFile");
 
     } catch(error, stackTrace) {
       throw DioError(
@@ -2052,6 +2072,7 @@ class AccountWriteApi {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+    print("AccountWrite/file : $_response");
 
     UploadFileResponse _responseData;
 

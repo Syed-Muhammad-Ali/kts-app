@@ -17,36 +17,39 @@ class AuthenticationService {
       AuthenticationService._internal();
 
   Future<Token> getAccessToken(String username, String password) async {
+
     final response = await http.post(
-        Uri.parse('${KtsEnvironment().config.identityServerApi}/connect/token'),
+        Uri.parse('${KtsEnvironment().config.identityServerApi}/api/login'),
+                // Uri.parse('${KtsEnvironment().config.identityServerApi}/connect/token'),
         headers: _getRequestHeaders(),
         body: await _getResourceOwnerBody(username, password));
+        print("Login : $response");
 
     return Token.fromApiJson(_handleResponse(response));
   }
 
-  Future<Token?> renewAccessToken(refreshToken) async {
-    final response = await http.post(
-        Uri.parse('${KtsEnvironment().config.identityServerApi}/connect/token'),
-        headers: _getRequestHeaders(),
-        body: await _getRefreshTokenBody(refreshToken));
+  // Future<Token?> renewAccessToken(refreshToken) async {
+  //   final response = await http.post(
+  //       Uri.parse('${KtsEnvironment().config.identityServerApi}/api/login'),
+  //       headers: _getRequestHeaders(),
+  //       body: await _getRefreshTokenBody(refreshToken));
 
-    return Token.fromApiJson(_handleResponse(response));
-  }
+  //   return Token.fromApiJson(_handleResponse(response));
+  // }
 
   dynamic _getRequestHeaders() {
     return {"content-type": "application/x-www-form-urlencoded"};
   }
 
-  Future<dynamic> _getRefreshTokenBody(String refreshToken) async {
-    print("Refresh token is: $refreshToken");
-    return {
-      "grant_type": "refresh_token",
-      "scope": KtsEnvironment().config.identityScopes,
-      "client_id": KtsEnvironment().config.identityClient,
-      "refresh_token": refreshToken
-    };  
-  }
+  // Future<dynamic> _getRefreshTokenBody(String refreshToken) async {
+  //   print("Refresh token is: $refreshToken");
+  //   return {
+  //     "grant_type": "refresh_token",
+  //     "scope": KtsEnvironment().config.identityScopes,
+  //     "client_id": KtsEnvironment().config.identityClient,
+  //     "refresh_token": refreshToken
+  //   };  
+  // }
 
   Future<dynamic> _getResourceOwnerBody(
       String username, String password) async {
@@ -69,9 +72,11 @@ class AuthenticationService {
         return responseJson;
       case 400:
         var error = json.decode(response.body);
+        print("Error: $error");
         if (error["error"] == "invalid_grant") {
           throw InvalidCredentialsException(error["description)"]);
         } else {
+          print('else');
           throw Exception(response.body.toString());
         }
       case 401:

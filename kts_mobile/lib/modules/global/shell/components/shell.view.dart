@@ -140,7 +140,7 @@ class _ShellState extends State<Shell> {
                             image: DecorationImage(
                                 fit: BoxFit.scaleDown,
                                 image: Svg('images/kts-logo.svg',
-                                    size: Size(22, 22)))))),
+                                    size: Size(22, 22)),)))),
                 Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,

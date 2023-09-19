@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:built_collection/built_collection.dart';
+import 'package:collection/collection.dart';
 import 'package:dart_date/dart_date.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,19 +9,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/forms/input-formatters/decimal_text_input_formatter.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:kts_mobile/common/theme/theme_styles.dart';
 import 'package:kts_mobile/modules/calendar/payment-dialog.view.dart';
 import 'package:kts_mobile/modules/global/connectivity/no_internet_connection-warning.dart';
-import 'package:intl/intl.dart';
-import 'dart:async';
-import 'package:built_collection/built_collection.dart';
 import 'package:kts_mobile/modules/settings/customer/customer-dialog.view.dart';
 import 'package:kts_mobile/modules/settings/service/service-dialog.view.dart';
-import 'package:collection/collection.dart';
+
 import '../../common/routing/kts_routing_links.dart';
 
 class AppointmentView extends StatefulWidget {
@@ -1095,7 +1096,8 @@ class _AppointmentViewState extends State<AppointmentView> {
                                 return ListTile(
                                     contentPadding: EdgeInsets.all(0),
                                     onTap: (() {}),
-                                    title: (Padding(
+                                    title: (
+                                      Padding(
                                         padding: EdgeInsets.only(bottom: 12),
                                         child: Container(
                                           decoration: BoxDecoration(
@@ -1152,7 +1154,12 @@ class _AppointmentViewState extends State<AppointmentView> {
                                                               ThemeColors.error,
                                                         ))
                                                   ])),
-                                        ))));
+                                        )
+                                        )
+
+                                        )
+                                        
+                                        );
                               }),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
