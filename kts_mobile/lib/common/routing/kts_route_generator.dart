@@ -60,7 +60,7 @@ class KtsRouteConfigurator {
                   name: KtsRoutingLinks.calendar,
                   pageBuilder: (context, state) => MaterialPage<void>(
                         key: state.pageKey,
-                        child: CalendarView(
+                        child: CalendarViewScreen(
                           apiClient,
                           shelladdStream.stream,
                           toggleAddStream,

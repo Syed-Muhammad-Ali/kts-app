@@ -6,7 +6,6 @@ import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
 import 'package:kts_mobile/common/theme/theme_styles.dart';
-import 'package:intl/intl.dart';
 import 'package:kts_mobile/modules/overview/overview-stats.dart';
 
 class OverviewView extends StatefulWidget {
@@ -143,10 +142,10 @@ class _OverviewViewViewState extends State<OverviewView> {
                   children: [
                     this.current == null
                         ? SizedBox()
-                        : OverviewStats(this.current!),
+                        : OverviewStats(this.current!,false),
                     this.forecasted == null
                         ? SizedBox()
-                        : OverviewStats(this.forecasted!),
+                        : OverviewStats(this.forecasted!,true),
                   ],
                 ))
               ])))

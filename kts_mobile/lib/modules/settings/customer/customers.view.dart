@@ -290,7 +290,7 @@ class _CustomersViewState extends State<CustomersView> {
                                                 icon: Icon(
                                                   Icons.close,
                                                   color: ThemeColors.error,
-                                                ))
+                                                )),
                                           ])),
                                 ))));
                       }),

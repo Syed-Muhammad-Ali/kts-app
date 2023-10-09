@@ -20,6 +20,7 @@ part 'update_expense_request.g.dart';
 /// * [paymentMethod] 
 /// * [recieptId] 
 /// * [supplier] 
+/// * [recurring] 
 @BuiltValue()
 abstract class UpdateExpenseRequest implements Built<UpdateExpenseRequest, UpdateExpenseRequestBuilder> {
   @BuiltValueField(wireName: r'id')
@@ -46,6 +47,9 @@ abstract class UpdateExpenseRequest implements Built<UpdateExpenseRequest, Updat
 
   @BuiltValueField(wireName: r'supplier')
   String? get supplier;
+
+  @BuiltValueField(wireName: r'recurring')
+  String? get recurring;
 
   UpdateExpenseRequest._();
 
@@ -113,6 +117,13 @@ class _$UpdateExpenseRequestSerializer implements PrimitiveSerializer<UpdateExpe
       yield r'supplier';
       yield serializers.serialize(
         object.supplier,
+        specifiedType: const FullType(String),
+      );
+    }
+    if (object.recurring != null) {
+      yield r'recurring';
+      yield serializers.serialize(
+        object.recurring,
         specifiedType: const FullType(String),
       );
     }
@@ -195,6 +206,13 @@ class _$UpdateExpenseRequestSerializer implements PrimitiveSerializer<UpdateExpe
           ) as String;
           result.supplier = valueDes;
           break;
+        case r'recurring':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(String),
+          ) as String;
+          result.recurring = valueDes;
+          break;  
         default:
           unhandled.add(key);
           unhandled.add(value);

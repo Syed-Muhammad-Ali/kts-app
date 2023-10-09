@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
@@ -21,51 +23,71 @@ class _SummariesViewState extends State<SummariesView> {
   final dateFormatter = new DateFormat('dd/MM/yyyy');
   final currencyFormatter = new NumberFormat("#,##0.00", "en_GB");
 
-  //var income = List<IncomeDto>.empty();
-  //num? totalIncome = 0;
-  //StreamSubscription<void>? fabSubscription = null;
-  //CancelToken? cancelToken = CancelToken();
+  var expenses = List<ExpenseDto>.empty();
+  num? taxLiability = 0;
+  num? total_yearly_expenses = 0;
+  num? total_yearly_revenues = 0;
+  num? total_monthly_expenses = 0;
+  num? total_monthly_revenues = 0;
+  StreamSubscription<void>? fabSubscription = null;
+  CancelToken? cancelToken = CancelToken();
   //String? accoutingPeriodLabel;
   //_IncomesViewState() {}
-
   @override
   void initState() {
     super.initState();
 
-    /*fabSubscription = widget.fabStream.listen((value) {
-      context.goNamed(KtsRoutingLinks.create_income);
-    });
-
     EasyLoading.show(
-      status: 'Loading income...',
+      status: 'Loading Summary...',
       maskType: EasyLoadingMaskType.black,
     );
-    widget.apiClient.getAccountReadApi().accountReadInitAccountIncomes().then(
-        (value) {
-      if (value.data != null) {
-        setState(() {
-          income = (value.data!.income ?? List<IncomeDto>.empty())
-              .map((e) => e)
-              .toList();
-          totalIncome = value.data!.totalIncomeSum;
-          accoutingPeriodLabel =
-              "${value.data!.accountingPeriod!.periodStartDate.toLocal().year}/${value.data!.accountingPeriod!.periodEndDate.toLocal().year}";
-        });
-      }
-      EasyLoading.dismiss();
-    }, onError: (err) => {EasyLoading.dismiss()});
-    */
+
+    DateTime now = DateTime.now();
+    var startDate = DateFormat('yyyy-MM-dd').format(now);
+    var endDate = DateFormat('yyyy-MM-dd').format(now);
+
+    // Convert formatted strings to DateTime objects
+    DateTime parsedStartDate = DateFormat('yyyy-MM-dd').parse(startDate);
+    DateTime parsedEndDate = DateFormat('yyyy-MM-dd').parse(endDate);
+
+    print("parsedStartDate : $parsedStartDate");
+    print("parsedEndDate : $parsedEndDate");
+    widget.apiClient
+        .getAccountReadApi()
+        .accountReadSummary(
+          start_date: parsedStartDate.toUtc(),
+          end_date: parsedEndDate.toUtc(),
+          cancelToken: cancelToken,
+        )
+        .then(
+      (value) {
+        if (value.data != null) {
+          setState(() {
+            expenses = (value.data!.expenses ?? List<ExpenseDto>.empty())
+                .map((e) => e)
+                .toList();
+            taxLiability = value.data!.taxLiability;
+            total_yearly_expenses = value.data!.total_yearly_expenses;
+            total_yearly_revenues = value.data!.total_yearly_revenues;
+            total_monthly_expenses = value.data!.total_monthly_expenses;
+            total_monthly_revenues = value.data!.total_monthly_revenues;
+          });
+        }
+        EasyLoading.dismiss();
+      },
+      onError: (err) => {EasyLoading.dismiss()},
+    );
   }
 
   @override
   Future dispose() async {
     super.dispose();
-    /*if (fabSubscription != null) {
+    if (fabSubscription != null) {
       await fabSubscription!.cancel();
     }
     if (cancelToken != null) {
       cancelToken!.cancel();
-    }*/
+    }
   }
 
   @override
@@ -115,99 +137,245 @@ class _SummariesViewState extends State<SummariesView> {
                                   fontWeight: FontWeight.w700,
                                   fontSize: 10)),
                         ),
-                        //  Icon(
-                        //   getCategoryIcon(
-                        //       expenseByCategory[index]
-                        //           .category),
-                        //   color: ThemeColors.darkText,
-                        // ),
                       ),
                     ],
                   ),
+                  SizedBox(height: 20),
                   Padding(
-                      padding: EdgeInsets.only(top: 12, bottom: 12),
-                      child: Text(
-                        "No summaries available yet, check back later..",
-                        style: TextStyle(
-                            color: ThemeColors.light,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w300),
+                      padding: EdgeInsets.only(bottom: 12),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            color: ThemeColors.darkGrey),
+                        child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, top: 20, right: 20, bottom: 20),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                      child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Tax Liability",
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
+                                          color: ThemeColors.light,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                      ),
+                                    ],
+                                  )),
+                                  const SizedBox(width: 12),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          taxLiability == null
+                                              ? ""
+                                              : "£${currencyFormatter.format(taxLiability)}",
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              color: ThemeColors.darkPink,
+                                              fontWeight: FontWeight.w700)),
+                                    ],
+                                  )
+                                ])),
                       )),
-                  ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(8),
-                      itemCount: 7,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                            contentPadding: EdgeInsets.all(0),
-                            // onTap: (() => context.pushNamed(
-                            //         KtsRoutingLinks.expenses,
-                            //         params: {
-                            //           'categoryId': expenseByCategory[index]
-                            //               .category!
-                            //               .id
-                            //               .toString()
-                            //         })),
-                            
-                            title: (
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 12),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(15)),
-                                      color: ThemeColors.darkGrey),
-                                  child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 20,
-                                          top: 16,
-                                          right: 20,
-                                          bottom: 16),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                                child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Tax Liability"
-                                                  //      ??
-                                                  // "-"
-                                                  ,
-                                                  textAlign: TextAlign.start,
-                                                  style: const TextStyle(
-                                                    color: ThemeColors.light,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 14,
-                                                  ),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 2,
-                                                ),
-                                              ],
-                                            )),
-                                            const SizedBox(width: 12),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text("£28,255.07",
-                                                    // ${currencyFormatter.format(expenseByCategory[index].total)}
-
-                                                    style: const TextStyle(
-                                                        color: ThemeColors
-                                                            .darkPink,
-                                                        fontWeight:
-                                                            FontWeight.w700)),
-                                              ],
-                                            )
-                                          ])),
-                                ))));
-                      }),
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 12),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            color: ThemeColors.darkGrey),
+                        child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, top: 20, right: 20, bottom: 20),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                      child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Income for Year",
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
+                                          color: ThemeColors.light,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                      ),
+                                    ],
+                                  )),
+                                  const SizedBox(width: 12),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          total_yearly_revenues == null
+                                              ? ""
+                                              : "£${currencyFormatter.format(total_yearly_revenues)}",
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              color: ThemeColors.darkPink,
+                                              fontWeight: FontWeight.w700)),
+                                    ],
+                                  )
+                                ])),
+                      )),
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 12),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            color: ThemeColors.darkGrey),
+                        child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, top: 20, right: 20, bottom: 20),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                      child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Income for Month",
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
+                                          color: ThemeColors.light,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                      ),
+                                    ],
+                                  )),
+                                  const SizedBox(width: 12),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          total_monthly_revenues == null
+                                              ? ""
+                                              : "£${currencyFormatter.format(total_monthly_revenues)}",
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              color: ThemeColors.darkPink,
+                                              fontWeight: FontWeight.w700)),
+                                    ],
+                                  )
+                                ])),
+                      )),
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 12),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            color: ThemeColors.darkGrey),
+                        child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, top: 20, right: 20, bottom: 20),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                      child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Expenses for Year",
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
+                                          color: ThemeColors.light,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                      ),
+                                    ],
+                                  )),
+                                  const SizedBox(width: 12),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          total_yearly_expenses == null
+                                              ? ""
+                                              : "£${currencyFormatter.format(total_yearly_expenses)}",
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              color: ThemeColors.darkPink,
+                                              fontWeight: FontWeight.w700)),
+                                    ],
+                                  )
+                                ])),
+                      )),
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 12),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            color: ThemeColors.darkGrey),
+                        child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, top: 20, right: 20, bottom: 20),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                      child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Expenses for Month",
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
+                                          color: ThemeColors.light,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                      ),
+                                    ],
+                                  )),
+                                  const SizedBox(width: 12),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          total_monthly_expenses == null
+                                              ? ""
+                                              : "£${currencyFormatter.format(total_monthly_expenses)}",
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              color: ThemeColors.darkPink,
+                                              fontWeight: FontWeight.w700)),
+                                    ],
+                                  )
+                                ])),
+                      )),
                 ],
               ))
         ])),

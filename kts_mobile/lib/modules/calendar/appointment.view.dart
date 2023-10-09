@@ -15,6 +15,7 @@ import 'package:kts_mobile/common/forms/input-formatters/decimal_text_input_form
 import 'package:kts_mobile/common/theme/theme_colors.dart';
 import 'package:kts_mobile/common/theme/theme_styles.dart';
 import 'package:kts_mobile/modules/calendar/payment-dialog.view.dart';
+import 'package:kts_mobile/modules/calendar/refund_dialog.view.dart';
 import 'package:kts_mobile/modules/global/connectivity/no_internet_connection-warning.dart';
 import 'package:kts_mobile/modules/settings/customer/customer-dialog.view.dart';
 import 'package:kts_mobile/modules/settings/service/service-dialog.view.dart';
@@ -51,7 +52,11 @@ class _AppointmentViewState extends State<AppointmentView> {
       TextEditingController();
   final TextEditingController appointmentEndTimeController =
       TextEditingController();
+  final TextEditingController refundAmountCostController =
+      TextEditingController();
   final FocusNode paymentNotesFocusNode = FocusNode();
+  final TextEditingController tipAmountController = TextEditingController();
+  final FocusNode tipAmountFocusNode = FocusNode();
   final FocusNode expenseCategoryFocusNode = FocusNode();
   final currencyFormatter = new NumberFormat("#,##0.00", "en_GB");
   final dateFormatter = new DateFormat('dd/MM/yyyy');
@@ -125,7 +130,10 @@ class _AppointmentViewState extends State<AppointmentView> {
                   ? DateTime(
                       widget.proposedDateTime!.year,
                       widget.proposedDateTime!.month,
-                      widget.proposedDateTime!.day)
+                      widget.proposedDateTime!.day,
+                      8,
+                      00
+                    )
                   : DateTime(DateTime.now().year, DateTime.now().month,
                       DateTime.now().day),
               loadAllDaySlots(),
@@ -134,7 +142,7 @@ class _AppointmentViewState extends State<AppointmentView> {
                     widget.proposedDateTime != null
                         ? widget.proposedDateTime!
                         : DateTime(DateTime.now().year, DateTime.now().month,
-                            DateTime.now().day);
+                            DateTime.now().day,8,00);
               })
             }
         });
@@ -155,6 +163,7 @@ class _AppointmentViewState extends State<AppointmentView> {
           if (appointment != null) {
             depositAmountCostController.text = appointment!.deposit.toString();
             totalCostController.text = appointment!.cost.toString();
+            tipAmountController.text=appointment!.tip.toString();
             selectedCustomer =
                 customers.firstWhere((c) => c.id == appointment!.customer!.id);
             selectedService =
@@ -162,7 +171,7 @@ class _AppointmentViewState extends State<AppointmentView> {
             selectedAppointmentDate = DateTime(
                 appointment!.startDateTime.toLocal().year,
                 appointment!.startDateTime.toLocal().month,
-                appointment!.startDateTime.toLocal().day);
+                appointment!.startDateTime.toLocal().day,8,00);
             loadAllDaySlots();
             _loadSlots().then((value) {
               selectedAppointmentStartDateTime =
@@ -185,24 +194,35 @@ class _AppointmentViewState extends State<AppointmentView> {
     });
   }
 
+  // void loadAllDaySlots() {
+  //   allDayMinSlots = List<DateTime>.empty(growable: true);
+  //   var counter = Duration();
+  //   while (counter < Duration(hours: 24)) {
+  //     allDayMinSlots.add(DateTime(selectedAppointmentDate!.year,
+  //             selectedAppointmentDate!.month, selectedAppointmentDate!.day)
+  //         .add(counter));
+  //     counter = Duration(minutes: counter.inMinutes + 5);
+  //   }
+  // }
   void loadAllDaySlots() {
-    allDayMinSlots = List<DateTime>.empty(growable: true);
-    var counter = Duration();
-    while (counter < Duration(hours: 24)) {
-      allDayMinSlots.add(DateTime(selectedAppointmentDate!.year,
-              selectedAppointmentDate!.month, selectedAppointmentDate!.day)
-          .add(counter));
-      counter = Duration(minutes: counter.inMinutes + 5);
-    }
+  allDayMinSlots = List<DateTime>.empty(growable: true);
+  var initialTime = DateTime(selectedAppointmentDate!.year,
+      selectedAppointmentDate!.month, selectedAppointmentDate!.day, 8, 00);
+
+  var counter = Duration();
+  while (counter < Duration(hours: 24)) {  // Change this to generate slots for 16 hours starting from 8am
+    allDayMinSlots.add(initialTime.add(counter));
+    counter = Duration(minutes: counter.inMinutes + 5);
   }
+}
 
   _serviceChange() {
     totalCostController.text = selectedService!.totalPrice.toString();
     depositAmountCostController.text =
         selectedService!.depositType == DepositType.fixed
-            ? selectedService!.deposit.toString()
+            ? selectedService!.deposit.toStringAsFixed(2)
             : ((selectedService!.totalPrice / 100) * selectedService!.deposit)
-                .toString();
+                .toStringAsFixed(2);
 
     if (selectedService!.defaultAppointmentDuration != 0 &&
         selectedService!.defaultAppointmentDuration != null &&
@@ -316,6 +336,7 @@ class _AppointmentViewState extends State<AppointmentView> {
       b.endDateTime = selectedAppointmentEndDateTime!.utc;
       b.startDateTime = selectedAppointmentStartDateTime!.utc;
       b.serviceId = selectedService!.id;
+      b.tip = int.parse(tipAmountController.text);
       b.payments = ListBuilder<Payment>(this.payments.map((p) => Payment((pb) {
             pb.amount = p.amount;
             pb.paymentDateTime = p.paymentDateTime.utc;
@@ -348,6 +369,7 @@ class _AppointmentViewState extends State<AppointmentView> {
     var request = UpdateAppointmentRequest((b) {
       b.id = appointment!.id;
       b.cost = num.parse(totalCostController.text);
+      b.tip=int.parse(tipAmountController.text);
       b.customerId = selectedCustomer!.id;
       b.depositAmount = num.parse(depositAmountCostController.text);
       b.endDateTime = selectedAppointmentEndDateTime!.utc;
@@ -383,6 +405,22 @@ class _AppointmentViewState extends State<AppointmentView> {
       context: context,
       builder: (BuildContext context) {
         return PaymentDialogView();
+      },
+    ).then((value) {
+      if (value != null) {
+        payments.add(value);
+        setState(() {
+          _calculateBalance();
+        });
+      }
+    });
+  }
+
+  Future<void> _refundDialogBuilder(BuildContext context) {
+    return showDialog<IncomeDto>(
+      context: context,
+      builder: (BuildContext context) {
+        return RefundDialogView();
       },
     ).then((value) {
       if (value != null) {
@@ -850,79 +888,97 @@ class _AppointmentViewState extends State<AppointmentView> {
                               controller: appointmentStartTimeController,
                               readOnly: true, // when true user cannot edit text
                               onTap: () async {
-                                if (selectedAppointmentStartDateTime == null &&
-                                    availableStartTimes.length > 0) {
-                                  selectedAppointmentStartDateTime =
-                                      availableStartTimes[0];
-                                }
-                                var item = availableStartTimes.firstWhere(
-                                    (ast) =>
-                                        ast ==
-                                        selectedAppointmentStartDateTime);
-                                startDateController =
-                                    new FixedExtentScrollController(
-                                        initialItem:
-                                            availableStartTimes.indexOf(item));
+                               if (availableStartTimes.isNotEmpty) {
+    var item = availableStartTimes.firstWhere(
+      (ast) => ast == selectedAppointmentStartDateTime,
+      orElse: () => availableStartTimes.first, // Set a default value when no matching element is found
+    );
 
-                                showCupertinoModalPopup<void>(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        Container(
-                                          height: 250,
-                                          padding:
-                                              const EdgeInsets.only(top: 6.0),
-                                          margin: EdgeInsets.only(
-                                            bottom: MediaQuery.of(context)
-                                                .viewInsets
-                                                .bottom,
-                                          ),
-                                          color: ThemeColors.darkGrey,
-                                          child: Column(children: [
-                                            SizedBox(
-                                                height: 180,
-                                                child: CupertinoPicker(
-                                                    scrollController:
-                                                        startDateController,
-                                                    itemExtent: 50,
-                                                    onSelectedItemChanged:
-                                                        (index) {
-                                                      selectedAppointmentStartDateTime =
-                                                          availableStartTimes[
-                                                              index];
-                                                    },
-                                                    children: availableStartTimes
-                                                        .map((e) => Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    top: 15),
-                                                            child: Text(
-                                                                style: TextStyle(
-                                                                    color: ThemeColors
-                                                                        .light,
-                                                                    fontSize:
-                                                                        18,
-                                                                    fontFamily:
-                                                                        KtsAppWidgetStyles
-                                                                            .fontFamily),
-                                                                DateFormat(
-                                                                        'hh:mm a')
-                                                                    .format(
-                                                                        e))))
-                                                        .toList())),
-                                            TextButton(
-                                                style: KtsAppWidgetStyles
-                                                    .roundButtonStyle(
-                                                        ThemeColors.lightPink,
-                                                        ThemeColors.darkText,
-                                                        minSize: 25,
-                                                        minWidth: 0.0),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Text("Confirm"))
-                                          ]),
-                                        ));
-                              }),
+    startDateController = FixedExtentScrollController(
+      initialItem: availableStartTimes.indexOf(item),
+    );
+
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => Container(
+        height: 250,
+        padding: const EdgeInsets.only(top: 6.0),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        color: ThemeColors.darkGrey,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 180,
+              child: CupertinoPicker(
+                scrollController: startDateController,
+                itemExtent: 50,
+                onSelectedItemChanged: (index) {
+                  selectedAppointmentStartDateTime = availableStartTimes[index];
+                },
+                children: availableStartTimes
+                    .map(
+                      (e) => Padding(
+                        padding: EdgeInsets.only(top: 15),
+                        child: Text(
+                          DateFormat('hh:mm a').format(e),
+                          style: TextStyle(
+                            color: ThemeColors.light,
+                            fontSize: 18,
+                            fontFamily: KtsAppWidgetStyles.fontFamily,
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            TextButton(
+              style: KtsAppWidgetStyles.roundButtonStyle(
+                ThemeColors.lightPink,
+                ThemeColors.darkText,
+                minSize: 25,
+                minWidth: 0.0,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Confirm"),
+            )
+          ],
+        ),
+      ),
+    );
+  } else {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('No Available Start Times'),
+          content: Text('No available start times found for the selected date.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Set a default start time of 8am
+                selectedAppointmentStartDateTime = DateTime(
+                  selectedAppointmentDate!.year,
+                  selectedAppointmentDate!.month,
+                  selectedAppointmentDate!.day,
+                  8,
+                  0,
+                );
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+                              }
+                              ),
                           const SizedBox(height: 24),
                           TextFormField(
                               autovalidateMode:
@@ -1059,6 +1115,34 @@ class _AppointmentViewState extends State<AppointmentView> {
                             },
                           ),
                           const SizedBox(height: 24),
+                          TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            textInputAction: TextInputAction.next,
+                            keyboardType:
+                                TextInputType.numberWithOptions(decimal: true),
+                            focusNode: tipAmountFocusNode,
+                            textCapitalization: TextCapitalization.words,
+                            // validator: MultiValidator([
+                            //   RequiredValidator(
+                            //       errorText: "Tip Amount is required"),
+                            // ]),
+                            style: KtsAppWidgetStyles.fieldTextStyle(),
+                            decoration:
+                                KtsAppWidgetStyles.fieldInputDdecoration(
+                                    'Tip', 'e.g. £32.50',
+                                    suffixIcon: KtsCustomAppIcons.coins,
+                                    showInfo: false),
+                            autofillHints: const [AutofillHints.name],
+                            controller: tipAmountController,
+                            inputFormatters: <TextInputFormatter>[
+                              DecimalTextInputFormatter(2)
+                            ],
+                            onEditingComplete: () {
+                              tipAmountFocusNode.requestFocus();
+                            },
+                          ),
+                          const SizedBox(height: 24),
                           payments.length > 0
                               ? Align(
                                   alignment: Alignment.centerLeft,
@@ -1096,8 +1180,7 @@ class _AppointmentViewState extends State<AppointmentView> {
                                 return ListTile(
                                     contentPadding: EdgeInsets.all(0),
                                     onTap: (() {}),
-                                    title: (
-                                      Padding(
+                                    title: (Padding(
                                         padding: EdgeInsets.only(bottom: 12),
                                         child: Container(
                                           decoration: BoxDecoration(
@@ -1154,13 +1237,64 @@ class _AppointmentViewState extends State<AppointmentView> {
                                                               ThemeColors.error,
                                                         ))
                                                   ])),
-                                        )
-                                        )
-
-                                        )
-                                        
-                                        );
+                                        ))));
                               }),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextButton(
+                                  onPressed: () =>
+                                      _paymentDialogBuilder(context),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                          padding: EdgeInsets.only(right: 6),
+                                          child: Icon(
+                                            size: 20,
+                                            KtsCustomAppIcons
+                                                .add_circle_outline,
+                                            color: ThemeColors.darkPink,
+                                          )),
+                                      Text(
+                                        "Add Payment",
+                                        style: TextStyle(
+                                            color: ThemeColors.darkPink,
+                                            fontSize: 13,
+                                            fontFamily:
+                                                KtsAppWidgetStyles.fontFamily,
+                                            fontWeight: FontWeight.w600),
+                                      )
+                                    ],
+                                  )),
+                              appointment != null
+                                  ? TextButton(
+                                      onPressed: () =>
+                                          _refundDialogBuilder(context),
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 6),
+                                              child: Icon(
+                                                size: 20,
+                                                KtsCustomAppIcons
+                                                    .add_circle_outline,
+                                                color: ThemeColors.darkPink,
+                                              )),
+                                          Text(
+                                            "Redfund Payment",
+                                            style: TextStyle(
+                                                color: ThemeColors.darkPink,
+                                                fontSize: 13,
+                                                fontFamily: KtsAppWidgetStyles
+                                                    .fontFamily,
+                                                fontWeight: FontWeight.w600),
+                                          )
+                                        ],
+                                      ))
+                                  : SizedBox(),
+                            ],
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -1186,30 +1320,6 @@ class _AppointmentViewState extends State<AppointmentView> {
                                   )
                                 ]),
                               ),
-                              TextButton(
-                                  onPressed: () =>
-                                      _paymentDialogBuilder(context),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                          padding: EdgeInsets.only(right: 6),
-                                          child: Icon(
-                                            size: 20,
-                                            KtsCustomAppIcons
-                                                .add_circle_outline,
-                                            color: ThemeColors.darkPink,
-                                          )),
-                                      Text(
-                                        "Add Payment",
-                                        style: TextStyle(
-                                            color: ThemeColors.darkPink,
-                                            fontSize: 13,
-                                            fontFamily:
-                                                KtsAppWidgetStyles.fontFamily,
-                                            fontWeight: FontWeight.w600),
-                                      )
-                                    ],
-                                  )),
                             ],
                           ),
                         ]),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/forms/input-formatters/decimal_text_input_formatter.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
@@ -159,184 +160,207 @@ class _ServiceDialogViewState extends State<ServiceDialogView> {
                 ),
                 color: ThemeColors.darkGrey,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: Padding(
-                padding: EdgeInsets.all(18),
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Service",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            color: ThemeColors.lightPink,
-                            fontSize: 26,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        widget.service == null
-                            ? "Add a service"
-                            : "Update a service",
-                        style: TextStyle(
-                            color: ThemeColors.light,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w300),
-                      ),
-                      const SizedBox(height: 12),
-                      Form(
-                          key: formKey,
-                          child: Column(
-                            children: [
-                              TextFormField(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                textInputAction: TextInputAction.next,
-                                focusNode: nameFocusNode,
-                                validator: MultiValidator([
-                                  RequiredValidator(
-                                      errorText: "Name is required"),
-                                ]),
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                   Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      onPressed: () => context.pop(),
+                      icon: Icon(
+                        Icons.close,
+                        color: ThemeColors.error,
+                        size: 32,
+                      )),
+                 SizedBox(),
+                ],
+              ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 18,
+                      right: 18
+                    ),
+                    child: Text(
+                      "Service",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: ThemeColors.lightPink,
+                          fontSize: 26,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Padding(
+                     padding: const EdgeInsets.only(left: 18, right: 18),
+                    child: Text(
+                      widget.service == null
+                          ? "Add a service"
+                          : "Update a service",
+                      style: TextStyle(
+                          color: ThemeColors.light,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w300),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Form(
+                      key: formKey,
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              textInputAction: TextInputAction.next,
+                              focusNode: nameFocusNode,
+                              validator: MultiValidator([
+                                RequiredValidator(
+                                    errorText: "Name is required"),
+                              ]),
+                              style: KtsAppWidgetStyles.fieldTextStyle(),
+                              decoration:
+                                  KtsAppWidgetStyles.fieldInputDdecoration(
+                                      'Name', 'e.g. Infills',
+                                      showInfo: false),
+                              autofillHints: const [AutofillHints.name],
+                              controller: nameController,
+                              onEditingComplete: () {
+                                totalPriceFocusNode.requestFocus();
+                              },
+                            ),
+                            const SizedBox(height: 24),
+                            TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
+                              focusNode: totalPriceFocusNode,
+                              validator: MultiValidator([
+                                RequiredValidator(
+                                    errorText: "Total Price is required"),
+                              ]),
+                              style: KtsAppWidgetStyles.fieldTextStyle(),
+                              decoration:
+                                  KtsAppWidgetStyles.fieldInputDdecoration(
+                                      'Total Price', 'e.g. £50.00',
+                                      suffixIcon: KtsCustomAppIcons.coins,
+                                      showInfo: false),
+                              autofillHints: const ["total price"],
+                              controller: totalPriceController,
+                              inputFormatters: <TextInputFormatter>[
+                                DecimalTextInputFormatter(2)
+                              ],
+                              onEditingComplete: () {
+                                depositTypeFocusNode.requestFocus();
+                              },
+                            ),
+                            const SizedBox(height: 24),
+                            DropdownButtonFormField<DepositType>(
+                                value: selectedDepositType,
+                                focusNode: depositTypeFocusNode,
+                                icon: const Padding(
+                                    padding: EdgeInsets.only(right: 10),
+                                    child: const Icon(Icons
+                                        .arrow_drop_down_circle_outlined)),
+                                isExpanded: true,
+                                elevation: 16,
                                 style: KtsAppWidgetStyles.fieldTextStyle(),
+                                dropdownColor: ThemeColors.darkGrey,
+                                iconEnabledColor: ThemeColors.darkPink,
                                 decoration:
                                     KtsAppWidgetStyles.fieldInputDdecoration(
-                                        'Name', 'e.g. Infills',
-                                        showInfo: false),
-                                autofillHints: const [AutofillHints.name],
-                                controller: nameController,
-                                onEditingComplete: () {
-                                  totalPriceFocusNode.requestFocus();
+                                        'Deposit Type', 'e.g. Percentage'),
+                                onChanged: (DepositType? value) {
+                                  // This is called when the user selects an item.
+                                  setState(() {
+                                    selectedDepositType = value!;
+                                  });
                                 },
-                              ),
-                              const SizedBox(height: 24),
-                              TextFormField(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                textInputAction: TextInputAction.next,
-                                keyboardType: TextInputType.numberWithOptions(
-                                    decimal: true),
-                                focusNode: totalPriceFocusNode,
-                                validator: MultiValidator([
-                                  RequiredValidator(
-                                      errorText: "Total Price is required"),
-                                ]),
-                                style: KtsAppWidgetStyles.fieldTextStyle(),
-                                decoration:
-                                    KtsAppWidgetStyles.fieldInputDdecoration(
-                                        'Total Price', 'e.g. £50.00',
-                                        suffixIcon: KtsCustomAppIcons.coins,
-                                        showInfo: false),
-                                autofillHints: const ["total price"],
-                                controller: totalPriceController,
-                                inputFormatters: <TextInputFormatter>[
-                                  DecimalTextInputFormatter(2)
-                                ],
-                                onEditingComplete: () {
-                                  depositTypeFocusNode.requestFocus();
-                                },
-                              ),
-                              const SizedBox(height: 24),
-                              DropdownButtonFormField<DepositType>(
-                                  value: selectedDepositType,
-                                  focusNode: depositTypeFocusNode,
-                                  icon: const Padding(
-                                      padding: EdgeInsets.only(right: 10),
-                                      child: const Icon(Icons
-                                          .arrow_drop_down_circle_outlined)),
-                                  isExpanded: true,
-                                  elevation: 16,
-                                  style: KtsAppWidgetStyles.fieldTextStyle(),
-                                  dropdownColor: ThemeColors.darkGrey,
-                                  iconEnabledColor: ThemeColors.darkPink,
-                                  decoration:
-                                      KtsAppWidgetStyles.fieldInputDdecoration(
-                                          'Deposit Type', 'e.g. Percentage'),
-                                  onChanged: (DepositType? value) {
-                                    // This is called when the user selects an item.
-                                    setState(() {
-                                      selectedDepositType = value!;
-                                    });
-                                  },
-                                  validator: (value) =>
-                                      selectedDepositType == null
-                                          ? "Deposit Type is required"
-                                          : null,
-                                  items: [
-                                    DropdownMenuItem<DepositType>(
-                                      value: DepositType.fixed,
-                                      child: Text("Fixed Amount"),
+                                validator: (value) =>
+                                    selectedDepositType == null
+                                        ? "Deposit Type is required"
+                                        : null,
+                                items: [
+                                  DropdownMenuItem<DepositType>(
+                                    value: DepositType.fixed,
+                                    child: Text("Fixed Amount"),
+                                  ),
+                                  DropdownMenuItem<DepositType>(
+                                    value: DepositType.percentage,
+                                    child: Text(
+                                      "Percentage of Total",
                                     ),
-                                    DropdownMenuItem<DepositType>(
-                                      value: DepositType.percentage,
-                                      child: Text(
-                                        "Percentage of Total",
-                                      ),
-                                    ),
-                                  ]),
-                              const SizedBox(height: 24),
-                              TextFormField(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                textInputAction: TextInputAction.next,
-                                keyboardType: TextInputType.numberWithOptions(
-                                    decimal: true),
-                                focusNode: depositFocusNode,
-                                validator: MultiValidator([
-                                  RequiredValidator(
-                                      errorText: "Deposit Amount is required"),
+                                  ),
                                 ]),
-                                style: KtsAppWidgetStyles.fieldTextStyle(),
-                                decoration:
-                                    KtsAppWidgetStyles.fieldInputDdecoration(
-                                        'Deposit Amount', 'e.g. £10.00 OR 10%',
-                                        suffixIcon: KtsCustomAppIcons.coins,
-                                        showInfo: false),
-                                autofillHints: const ["deposit amount"],
-                                controller: depositController,
-                                inputFormatters: <TextInputFormatter>[
-                                  DecimalTextInputFormatter(2)
-                                ],
-                                onEditingComplete: () {
-                                  defaultDurationFocusNode.requestFocus();
-                                },
-                              ),
-                              const SizedBox(height: 24),
-                              TextFormField(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                textInputAction: TextInputAction.next,
-                                keyboardType: TextInputType.number,
-                                focusNode: defaultDurationFocusNode,
-                                style: KtsAppWidgetStyles.fieldTextStyle(),
-                                decoration:
-                                    KtsAppWidgetStyles.fieldInputDdecoration(
-                                        'Default Appointment Duration (mins)',
-                                        '180',
-                                        suffixIcon: KtsCustomAppIcons.clock,
-                                        showInfo: false),
-                                autofillHints: const [
-                                  "default appointment duration in minutes"
-                                ],
-                                controller: defaultMinuiteController,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                onEditingComplete: () {
-                                  depositTypeFocusNode.requestFocus();
-                                },
-                              ),
-                              const SizedBox(height: 24),
-                              TextButton(
-                                  style: KtsAppWidgetStyles.roundButtonStyle(
-                                      ThemeColors.lightPink,
-                                      ThemeColors.darkText,
-                                      minSize: 30),
-                                  onPressed: () => confirm(),
-                                  child: Text("Save"))
-                            ],
-                          ))
-                    ]))),
+                            const SizedBox(height: 24),
+                            TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
+                              focusNode: depositFocusNode,
+                              validator: MultiValidator([
+                                RequiredValidator(
+                                    errorText: "Deposit Amount is required"),
+                              ]),
+                              style: KtsAppWidgetStyles.fieldTextStyle(),
+                              decoration:
+                                  KtsAppWidgetStyles.fieldInputDdecoration(
+                                      'Deposit Amount', 'e.g. £10.00 OR 10%',
+                                      suffixIcon: KtsCustomAppIcons.coins,
+                                      showInfo: false),
+                              autofillHints: const ["deposit amount"],
+                              controller: depositController,
+                              inputFormatters: <TextInputFormatter>[
+                                DecimalTextInputFormatter(2)
+                              ],
+                              onEditingComplete: () {
+                                defaultDurationFocusNode.requestFocus();
+                              },
+                            ),
+                            const SizedBox(height: 24),
+                            TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.number,
+                              focusNode: defaultDurationFocusNode,
+                              style: KtsAppWidgetStyles.fieldTextStyle(),
+                              decoration:
+                                  KtsAppWidgetStyles.fieldInputDdecoration(
+                                      'Default Appointment Duration (mins)',
+                                      '180',
+                                      suffixIcon: KtsCustomAppIcons.clock,
+                                      showInfo: false),
+                              autofillHints: const [
+                                "default appointment duration in minutes"
+                              ],
+                              controller: defaultMinuiteController,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              onEditingComplete: () {
+                                depositTypeFocusNode.requestFocus();
+                              },
+                            ),
+                            const SizedBox(height: 24),
+                            TextButton(
+                                style: KtsAppWidgetStyles.roundButtonStyle(
+                                    ThemeColors.lightPink,
+                                    ThemeColors.darkText,
+                                    minSize: 30),
+                                onPressed: () => confirm(),
+                                child: Text("Save"))
+                          ],
+                        ),
+                      ))
+                ])),
       ),
     );
   }

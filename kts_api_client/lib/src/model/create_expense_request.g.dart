@@ -21,6 +21,9 @@ class _$CreateExpenseRequest extends CreateExpenseRequest {
   final int? recieptId;
   @override
   final String? supplier;
+  @override
+  final String? recurring;
+  
 
   factory _$CreateExpenseRequest(
           [void Function(CreateExpenseRequestBuilder)? updates]) =>
@@ -33,7 +36,9 @@ class _$CreateExpenseRequest extends CreateExpenseRequest {
       this.notes,
       required this.paymentMethod,
       this.recieptId,
-      this.supplier})
+      this.supplier,
+      this.recurring,
+      })
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         paidDateTime, r'CreateExpenseRequest', 'paidDateTime');
@@ -64,7 +69,8 @@ class _$CreateExpenseRequest extends CreateExpenseRequest {
         notes == other.notes &&
         paymentMethod == other.paymentMethod &&
         recieptId == other.recieptId &&
-        supplier == other.supplier;
+        supplier == other.supplier &&
+        recurring == other.recurring;
   }
 
   @override
@@ -77,6 +83,7 @@ class _$CreateExpenseRequest extends CreateExpenseRequest {
     _$hash = $jc(_$hash, paymentMethod.hashCode);
     _$hash = $jc(_$hash, recieptId.hashCode);
     _$hash = $jc(_$hash, supplier.hashCode);
+    _$hash = $jc(_$hash, recurring.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -90,7 +97,9 @@ class _$CreateExpenseRequest extends CreateExpenseRequest {
           ..add('notes', notes)
           ..add('paymentMethod', paymentMethod)
           ..add('recieptId', recieptId)
-          ..add('supplier', supplier))
+          ..add('supplier', supplier)
+          ..add('recurring', recurring)
+          )
         .toString();
   }
 }
@@ -129,6 +138,10 @@ class CreateExpenseRequestBuilder
   String? get supplier => _$this._supplier;
   set supplier(String? supplier) => _$this._supplier = supplier;
 
+  String? _recurring;
+  String? get recurring => _$this._recurring;
+  set recurring(String? recurring) => _$this._recurring = recurring;
+
   CreateExpenseRequestBuilder() {
     CreateExpenseRequest._defaults(this);
   }
@@ -143,6 +156,7 @@ class CreateExpenseRequestBuilder
       _paymentMethod = $v.paymentMethod;
       _recieptId = $v.recieptId;
       _supplier = $v.supplier;
+      _recurring = $v.recurring;
       _$v = null;
     }
     return this;
@@ -175,7 +189,9 @@ class CreateExpenseRequestBuilder
             paymentMethod: BuiltValueNullFieldError.checkNotNull(
                 paymentMethod, r'CreateExpenseRequest', 'paymentMethod'),
             recieptId: recieptId,
-            supplier: supplier);
+            supplier: supplier,
+            recurring:recurring
+            );
     replace(_$result);
     return _$result;
   }

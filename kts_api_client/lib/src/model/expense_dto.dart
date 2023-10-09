@@ -10,7 +10,7 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
 part 'expense_dto.g.dart';
-
+ 
 /// ExpenseDto
 ///
 /// Properties:
@@ -21,6 +21,7 @@ part 'expense_dto.g.dart';
 /// * [paymentMethod] 
 /// * [paidDateTime] 
 /// * [supplier] 
+/// * [recurring] 
 /// * [receipt] 
 @BuiltValue()
 abstract class ExpenseDto implements Built<ExpenseDto, ExpenseDtoBuilder> {
@@ -45,6 +46,9 @@ abstract class ExpenseDto implements Built<ExpenseDto, ExpenseDtoBuilder> {
 
   @BuiltValueField(wireName: r'supplier')
   String? get supplier;
+
+@BuiltValueField(wireName: r'recurring')
+  String? get recurring;
 
   @BuiltValueField(wireName: r'receipt')
   FileDto? get receipt;
@@ -110,6 +114,13 @@ class _$ExpenseDtoSerializer implements PrimitiveSerializer<ExpenseDto> {
       yield r'supplier';
       yield serializers.serialize(
         object.supplier,
+        specifiedType: const FullType(String),
+      );
+    }
+    if (object.recurring != null) {
+      yield r'recurring';
+      yield serializers.serialize(
+        object.recurring,
         specifiedType: const FullType(String),
       );
     }
@@ -192,6 +203,13 @@ class _$ExpenseDtoSerializer implements PrimitiveSerializer<ExpenseDto> {
           ) as String;
           result.supplier = valueDes;
           break;
+         case r'recurring':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(String),
+          ) as String;
+          result.recurring = valueDes;
+          break;  
         case r'receipt':
           final valueDes = serializers.deserialize(
             value,

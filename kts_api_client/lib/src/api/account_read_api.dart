@@ -20,6 +20,7 @@ import 'package:kts_booking_api/src/model/init_account_incomes_response.dart';
 import 'package:kts_booking_api/src/model/init_appointment_response.dart';
 import 'package:kts_booking_api/src/model/init_customers_response.dart';
 import 'package:kts_booking_api/src/model/init_services_response.dart';
+import 'package:kts_booking_api/src/model/summary_response.dart';
 
 class AccountReadApi {
 
@@ -304,6 +305,7 @@ class AccountReadApi {
     final _queryParameters = <String, dynamic>{
       r'accountingPeriodId': encodeQueryParameter(_serializers, accountingPeriodId, const FullType(int)),
     };
+    print(_queryParameters );
 
     final _response = await _dio.request<Object>(
       _path,
@@ -429,6 +431,10 @@ class AccountReadApi {
       extra: _response.extra,
     );
   }
+
+
+
+
 
   /// accountReadInitAccountExpense
   /// 
@@ -918,6 +924,91 @@ class AccountReadApi {
       extra: _response.extra,
     );
   }
+
+  /// accountReadGetAppointments
+  /// 
+  ///
+  /// Parameters:
+  /// * [start_date] 
+  /// * [end_date] 
+  /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
+  /// * [headers] - Can be used to add additional headers to the request
+  /// * [extras] - Can be used to add flags to the request
+  /// * [validateStatus] - A [ValidateStatus] callback that can be used to determine request success based on the HTTP status of the response
+  /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
+  /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
+  ///
+  /// Returns a [Future] containing a [Response] with a [SummaryResponse] as data
+  /// Throws [DioError] if API call or serialization fails
+  Future<Response<SummaryResponse>> accountReadSummary({ 
+    DateTime? start_date,
+    DateTime? end_date,
+    CancelToken? cancelToken,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? extra,
+    ValidateStatus? validateStatus,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    final _path = r'/api/AccountRead/summary';
+    final _options = Options(
+      method: r'GET',
+      headers: <String, dynamic>{
+        ...?headers,
+      },
+      extra: <String, dynamic>{
+        'secure': <Map<String, String>>[],
+        ...?extra,
+      },
+      validateStatus: validateStatus,
+    );
+
+    final _queryParameters = <String, dynamic>{
+      if (start_date != null) r'start_date':  start_date, 
+      if (end_date != null) r'end_date':  end_date, 
+    };
+    print(_queryParameters);
+    final _response = await _dio.request<Object>(
+      _path,
+      options: _options,
+      queryParameters: _queryParameters,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+    print("Summary : $_response");
+
+    SummaryResponse _responseData;
+
+    try {
+      const _responseType = FullType(SummaryResponse);
+      _responseData = _serializers.deserialize(
+        _response.data!,
+        specifiedType: _responseType,
+      ) as SummaryResponse;
+
+    } catch (error, stackTrace) {
+      throw DioError(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioErrorType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<SummaryResponse>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
+  }
+
 
   /// accountReadInitCustomers
   /// 

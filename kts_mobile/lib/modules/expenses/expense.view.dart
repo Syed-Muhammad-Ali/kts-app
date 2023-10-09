@@ -87,6 +87,7 @@ class _ExpenseViewState extends State<ExpenseView> {
   @override
   void initState() {
     super.initState();
+    print("recurrence : $recurrence");
     EasyLoading.show(
       status: 'Loading...',
       maskType: EasyLoadingMaskType.black,
@@ -153,20 +154,21 @@ class _ExpenseViewState extends State<ExpenseView> {
       return;
     }
 
-    int? recieptId;
-    if (file != null) {
-      EasyLoading.show(
-        status: 'Uploading reciept...',
-        maskType: EasyLoadingMaskType.black,
-      );
-      var bytes = await file!.readAsBytes();
-      Response<UploadFileResponse> response = await widget.apiClient
-          .getAccountWriteApi()
-          .accountWriteUploadFile(
-              formFile: MultipartFile.fromBytes(bytes, filename: file!.name));
-      recieptId = response.data != null ? response.data!.id : null;
-      print("accountWriteUploadFile : $response");
-    }
+    // int? recieptId;
+
+    // if (file != null) {
+    //   EasyLoading.show(
+    //     status: 'Uploading reciept...',
+    //     maskType: EasyLoadingMaskType.black,
+    //   );
+    //   var bytes = await file!.readAsBytes();
+    //   Response<UploadFileResponse> response = await widget.apiClient
+    //       .getAccountWriteApi()
+    //       .accountWriteUploadFile(
+    //           formFile: MultipartFile.fromBytes(bytes, filename: file!.name));
+    //   recieptId = response.data != null ? response.data!.id : null;
+    //   print("accountWriteUploadFile : $response");
+    // }
 
     EasyLoading.show(
       status: 'Creating expense...',
@@ -174,14 +176,15 @@ class _ExpenseViewState extends State<ExpenseView> {
     );
     var request = CreateExpenseRequest((b) {
       b.supplier = supplierController.text;
+      b.recurring= recurrence;
       b.amount = double.parse(paymentAmountController.text);
       b.categoryId = selectedExpenseCategory!.id;
       b.notes = paymentNotesController.text;
       b.paidDateTime = paymentDate!.toUtc();
       b.paymentMethod = selectedPaymentMethod;
-      if (recieptId != null) {
-        b.recieptId = recieptId;
-      }
+      // if (recieptId != null) {
+      //   b.recieptId = recieptId;
+      // }
     });
 
     widget.apiClient
@@ -202,25 +205,25 @@ class _ExpenseViewState extends State<ExpenseView> {
       return;
     }
 
-    int? recieptId = expense!.receipt != null ? expense!.receipt!.id : null;
+    // int? recieptId = expense!.receipt != null ? expense!.receipt!.id : null;
     // if a file has been selected upload it and get the file id
-    if (file != null) {
-      EasyLoading.show(
-        status: 'Uploading reciept...',
-        maskType: EasyLoadingMaskType.black,
-      );
-      var bytes = await file!.readAsBytes();
-      Response<UploadFileResponse> response = await widget.apiClient
-          .getAccountWriteApi()
-          .accountWriteUploadFile(
-              formFile: MultipartFile.fromBytes(bytes, filename: file!.name));
-      recieptId = response.data != null ? response.data!.id : null;
-    }
-    // if the expense had a recipt when loaded
-    // but has now been removed set to null to delete it
-    else if (expense!.receipt != null && fileName == null) {
-      recieptId = null;
-    }
+    // if (file != null) {
+    //   EasyLoading.show(
+    //     status: 'Uploading reciept...',
+    //     maskType: EasyLoadingMaskType.black,
+    //   );
+    //   var bytes = await file!.readAsBytes();
+    //   Response<UploadFileResponse> response = await widget.apiClient
+    //       .getAccountWriteApi()
+    //       .accountWriteUploadFile(
+    //           formFile: MultipartFile.fromBytes(bytes, filename: file!.name));
+    //   recieptId = response.data != null ? response.data!.id : null;
+    // }
+    // // if the expense had a recipt when loaded
+    // // but has now been removed set to null to delete it
+    // else if (expense!.receipt != null && fileName == null) {
+    //   recieptId = null;
+    // }
 
     EasyLoading.show(
       status: 'Updating expense...',
@@ -229,14 +232,15 @@ class _ExpenseViewState extends State<ExpenseView> {
     var request = UpdateExpenseRequest((b) {
       b.id = expense!.id;
       b.supplier = supplierController.text;
+      b.recurring=recurrence;
       b.amount = double.parse(paymentAmountController.text);
       b.categoryId = selectedExpenseCategory!.id;
       b.notes = paymentNotesController.text;
       b.paidDateTime = paymentDate!.toUtc();
       b.paymentMethod = selectedPaymentMethod;
-      if (recieptId != null) {
-        b.recieptId = recieptId;
-      }
+      // if (recieptId != null) {
+      //   b.recieptId = recieptId;
+      // }
     });
 
     widget.apiClient
@@ -282,40 +286,41 @@ class _ExpenseViewState extends State<ExpenseView> {
         imageQuality: imageQuality,
         maxWidth: imageMaxWidth);
     filePath = file;
-     
+
     if (file != null) {
       setState(() {
         fileName = file!.name;
         file = filePath;
-       imageFileList.add(file!);
+        imageFileList.add(file!);
       });
       print("fileName : $fileName");
     }
   }
 
-Future<void> launchCamera() async {
-  file = await _picker.pickImage(
-    source: ImageSource.camera,
-    imageQuality: imageQuality,
-    maxWidth: imageMaxWidth,
-  );
+  Future<void> launchCamera() async {
+    file = await _picker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: imageQuality,
+      maxWidth: imageMaxWidth,
+    );
 
-  if (file != null) {
-    setState(() {
-      fileName = file!.name;
-      filePath = file; // Set filePath to the selected file
-      imageFileList.add(file!);
-    });
+    if (file != null) {
+      setState(() {
+        fileName = file!.name;
+        filePath = file; // Set filePath to the selected file
+        imageFileList.add(file!);
+      });
+    }
   }
-}
 
   removeFile(int index) {
     setState(() {
       // file = null;
       // fileName = null;
-       imageFileList.removeAt(index);
+      imageFileList.removeAt(index);
     });
   }
+
   void clearSelectedFiles() {
     setState(() {
       imageFileList.clear();
@@ -481,21 +486,22 @@ Future<void> launchCamera() async {
                               children: <Widget>[
                                 Radio(
                                   fillColor: MaterialStateProperty.all(
-                                      recurrence == 'Weekly'
+                                      recurrence == 'weekly'
                                           ? ThemeColors.darkPink
                                           : ThemeColors.light),
-                                  value: 'Weekly',
+                                  value: 'weekly',
                                   groupValue: recurrence,
                                   onChanged: (value) {
                                     setState(() {
                                       recurrence = value!;
+                                      print("recurrence is : $recurrence");
                                     });
                                   },
                                 ),
                                 Text(
                                   'Weekly',
                                   style: TextStyle(
-                                    color: recurrence == 'Weekly'
+                                    color: recurrence == 'weekly'
                                         ? ThemeColors.lightPink
                                         : ThemeColors.light,
                                   ),
@@ -506,10 +512,10 @@ Future<void> launchCamera() async {
                               children: <Widget>[
                                 Radio(
                                   fillColor: MaterialStateProperty.all(
-                                      recurrence == 'Fortnightly'
+                                      recurrence == 'fortnightly'
                                           ? ThemeColors.darkPink
                                           : ThemeColors.light),
-                                  value: 'Fortnightly',
+                                  value: 'fortnightly',
                                   groupValue: recurrence,
                                   onChanged: (value) {
                                     setState(() {
@@ -520,7 +526,7 @@ Future<void> launchCamera() async {
                                 Text(
                                   'Fortnightly',
                                   style: TextStyle(
-                                    color: recurrence == 'Fortnightly'
+                                    color: recurrence == 'fortnightly'
                                         ? ThemeColors.lightPink
                                         : ThemeColors.light,
                                   ),
@@ -531,10 +537,10 @@ Future<void> launchCamera() async {
                               children: <Widget>[
                                 Radio(
                                   fillColor: MaterialStateProperty.all(
-                                      recurrence == 'Monthly'
+                                      recurrence == 'monthly'
                                           ? ThemeColors.darkPink
                                           : ThemeColors.light),
-                                  value: 'Monthly',
+                                  value: 'monthly',
                                   groupValue: recurrence,
                                   onChanged: (value) {
                                     setState(() {
@@ -545,7 +551,7 @@ Future<void> launchCamera() async {
                                 Text(
                                   'Monthly',
                                   style: TextStyle(
-                                    color: recurrence == 'Monthly'
+                                    color: recurrence == 'monthly'
                                         ? ThemeColors.lightPink
                                         : ThemeColors.light,
                                   ),
@@ -556,10 +562,10 @@ Future<void> launchCamera() async {
                               children: <Widget>[
                                 Radio(
                                   fillColor: MaterialStateProperty.all(
-                                      recurrence == 'Quarterly'
+                                      recurrence == 'quarterly'
                                           ? ThemeColors.darkPink
                                           : ThemeColors.light),
-                                  value: 'Quarterly',
+                                  value: 'quarterly',
                                   groupValue: recurrence,
                                   onChanged: (value) {
                                     setState(() {
@@ -570,7 +576,7 @@ Future<void> launchCamera() async {
                                 Text(
                                   'Quarterly',
                                   style: TextStyle(
-                                    color: recurrence == 'Quarterly'
+                                    color: recurrence == 'quarterly'
                                         ? ThemeColors.lightPink
                                         : ThemeColors.light,
                                   ),
@@ -807,51 +813,7 @@ Future<void> launchCamera() async {
                                       ]),
                                 ),
                               )),
-                              SizedBox(width: 8),
-                              Expanded(
-                                  child: Container(
-                                height: 80,
-                                child: DottedBorder(
-                                  color: ThemeColors.grey11,
-                                  borderType: BorderType.RRect,
-                                  radius: Radius.circular(15),
-                                  strokeWidth: 1,
-                                  dashPattern: [6, 4],
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        TextButton(
-                                          child: Column(
-                                            children: [
-                                               Icon(
-                                                  KtsCustomAppIcons.file_upload,
-                                                  color: ThemeColors.grey11,
-                                                  size: 24),
-                                              SizedBox(height: 6),
-                                              Text(
-                                                "OCR Scan",
-                                                style: TextStyle(
-                                                    color: ThemeColors.light,
-                                                    fontFamily:
-                                                        KtsAppWidgetStyles
-                                                            .fontFamily,
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              ),
-                                            ],
-                                          ),
-                                          onPressed: () async {
-                                            await launchCamera();
-                                          },
-                                        )
-                                      ]),
-                                ),
-                              )),
-                              SizedBox(width: 8),
+                              SizedBox(width: 12),
                               Expanded(
                                   child: Container(
                                 height: 80,
@@ -904,64 +866,82 @@ Future<void> launchCamera() async {
                                     Icon(KtsCustomAppIcons.file_upload,
                                         color: ThemeColors.darkPink, size: 24),
                                     SizedBox(height: 6),
-                                   ListView.builder(
-                                     physics: const NeverScrollableScrollPhysics(),
-                              padding: const EdgeInsets.all(0),
-                              itemCount:imageFileList.length,
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, int index) {
-                                        return ListTile(
-                                           contentPadding: EdgeInsets.all(0),
-                                        onTap: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => ViewImageScreen(),
-      settings: RouteSettings(arguments: {'path': imageFileList[index].path}),
-    ),
-  );
-},
-
-                                         title:Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  SizedBox(
-                                                      width: 20,
-                                                      height: 20,
-                                                      child: IconButton(
-                                                          padding: EdgeInsets.all(0),
-                                                          iconSize: 20,
-                                                          onPressed: () => removeFile(index),
-                                                          icon: Icon(Icons.close,
-                                                              color: ThemeColors.error,
-                                                              size: 20))),
-                                                  Expanded(
+                                    ListView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        padding: const EdgeInsets.all(0),
+                                        itemCount: imageFileList.length,
+                                        shrinkWrap: true,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return ListTile(
+                                            contentPadding: EdgeInsets.all(0),
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ViewImageScreen(),
+                                                  settings:
+                                                      RouteSettings(arguments: {
+                                                    'path': imageFileList[index]
+                                                        .path
+                                                  }),
+                                                ),
+                                              );
+                                            },
+                                            title: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    SizedBox(
+                                                        width: 20,
+                                                        height: 20,
+                                                        child: IconButton(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    0),
+                                                            iconSize: 20,
+                                                            onPressed: () =>
+                                                                removeFile(
+                                                                    index),
+                                                            icon: Icon(
+                                                                Icons.close,
+                                                                color:
+                                                                    ThemeColors
+                                                                        .error,
+                                                                size: 20))),
+                                                    Expanded(
                                                       // child: Image.file(File(imageFileList[index].path), fit: BoxFit.cover),
                                                       child: Text(
-                                                   imageFileList[index].name,
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    textAlign: TextAlign.left,
-                                                    style: TextStyle(
-                                                      color: ThemeColors.light,
-                                                      fontFamily:
-                                                          KtsAppWidgetStyles.fontFamily,
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w400,
+                                                        imageFileList[index]
+                                                            .name,
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        style: TextStyle(
+                                                          color:
+                                                              ThemeColors.light,
+                                                          fontFamily:
+                                                              KtsAppWidgetStyles
+                                                                  .fontFamily,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
-                                                  ),
-                                                ]),
-                                          ),
-                                          
-                                        );
-                                      }
-                                    ),
+                                                  ]),
+                                            ),
+                                          );
+                                        }),
                                   ],
                                 )
                               : SizedBox(),

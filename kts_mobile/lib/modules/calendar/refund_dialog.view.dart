@@ -4,27 +4,29 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:intl/intl.dart';
 import 'package:kts_booking_api/kts_booking_api.dart';
 import 'package:kts_mobile/common/forms/input-formatters/decimal_text_input_formatter.dart';
+import 'package:kts_mobile/common/theme/theme_colors.dart';
 import 'package:kts_mobile/common/theme/theme_styles.dart';
 
-import '../../common/theme/theme_colors.dart';
 
-class PaymentDialogView extends StatefulWidget {
-  PaymentDialogView({Key? key}) : super(key: key);
+class RefundDialogView extends StatefulWidget {
+  const RefundDialogView({super.key});
 
   @override
-  State<PaymentDialogView> createState() => _PaymentDialogViewState();
+  State<RefundDialogView> createState() => _RefundDialogViewState();
 }
 
-class _PaymentDialogViewState extends State<PaymentDialogView> {
+class _RefundDialogViewState extends State<RefundDialogView> {
   final currencyFormatter = new NumberFormat("#,##0.00", "en_GB");
   final dateFormatter = new DateFormat('dd/MM/yyyy');
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController paymentAmountController = TextEditingController();
-  final FocusNode paymentAmountFocusNode = FocusNode();
 
+  final TextEditingController refundAmountController = TextEditingController();
+  final FocusNode refundAmountFocusNode = FocusNode();
   DateTime? _paymentDate;
   final TextEditingController paymentDateController = TextEditingController();
   final FocusNode paymentDateFocusNode = FocusNode();
+  final FocusNode paymentMethodFocusNode = FocusNode();
+  PaymentMethod? selectedPaymentMethod;
   DateTime? get paymentDate {
     return _paymentDate;
   }
@@ -38,8 +40,7 @@ class _PaymentDialogViewState extends State<PaymentDialogView> {
     }
   }
 
-  final FocusNode paymentMethodFocusNode = FocusNode();
-  PaymentMethod? selectedPaymentMethod;
+  
 
   confirm() {
     if (!formKey.currentState!.validate()) {
@@ -48,7 +49,8 @@ class _PaymentDialogViewState extends State<PaymentDialogView> {
     var income = IncomeDto((b) {
       b.id = 0;
       b.paymentDateTime = paymentDate;
-      b.amount = num.parse(paymentAmountController.text);
+      b.amount = num.parse(refundAmountController.text) * (-1); // negative value will be sent as it is for refund
+      // b.amount = num.parse(refundAmountController.text) * (-1); // negative value will be sent as it is for refund
       b.paymentMethod = selectedPaymentMethod;
     });
 
@@ -81,7 +83,7 @@ class _PaymentDialogViewState extends State<PaymentDialogView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Payment",
+                        "Refund",
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             color: ThemeColors.lightPink,
@@ -90,7 +92,7 @@ class _PaymentDialogViewState extends State<PaymentDialogView> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        "Record an appointment payment",
+                        "Record a Refund payment",
                         style: TextStyle(
                             color: ThemeColors.light,
                             fontSize: 13,
@@ -108,15 +110,15 @@ class _PaymentDialogViewState extends State<PaymentDialogView> {
                                   focusNode: paymentDateFocusNode,
                                   validator: MultiValidator([
                                     RequiredValidator(
-                                        errorText: "Payment Date is required"),
+                                        errorText: "Refund Date is required"),
                                   ]),
                                   style: KtsAppWidgetStyles.fieldTextStyle(),
                                   decoration:
                                       KtsAppWidgetStyles.fieldInputDdecoration(
-                                          'Payment Date', 'e.g. 21/07/2023',
+                                          'Refund Date', 'e.g. 21/07/2023',
                                           suffixIcon: KtsCustomAppIcons
                                               .calendar_plus_o),
-                                  autofillHints: const ["payment date"],
+                                  autofillHints: const ["Refund date"],
                                   controller: paymentDateController,
                                   readOnly: true,
                                   onTap: () async {
@@ -132,7 +134,7 @@ class _PaymentDialogViewState extends State<PaymentDialogView> {
                                       paymentDateFocusNode.requestFocus();
                                     }
                                   }),
-                              const SizedBox(height: 24),
+                                     const SizedBox(height: 24),
                               DropdownButtonFormField<PaymentMethod>(
                                   value: selectedPaymentMethod,
                                   focusNode: paymentMethodFocusNode,
@@ -152,7 +154,7 @@ class _PaymentDialogViewState extends State<PaymentDialogView> {
                                     setState(() {
                                       selectedPaymentMethod = value!;
                                       if (selectedPaymentMethod != null) {
-                                        paymentAmountFocusNode.requestFocus();
+                                        refundAmountFocusNode.requestFocus();
                                       }
                                     });
                                   },
@@ -172,29 +174,30 @@ class _PaymentDialogViewState extends State<PaymentDialogView> {
                                       ),
                                     ),
                                   ]),
+                             
                               const SizedBox(height: 24),
                               TextFormField(
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
                                 textInputAction: TextInputAction.next,
-                                 keyboardType: TextInputType.numberWithOptions(
+                                keyboardType: TextInputType.numberWithOptions(
                                     decimal: true,
-                                    signed :true
+                                    signed :false
                                     ),
-                                focusNode: paymentAmountFocusNode,
+                                focusNode: refundAmountFocusNode,
                                 textCapitalization: TextCapitalization.words,
                                 validator: MultiValidator([
                                   RequiredValidator(
-                                      errorText: "Payment Amount is required"),
+                                      errorText: "Refund Amount is required"),
                                 ]),
                                 style: KtsAppWidgetStyles.fieldTextStyle(),
                                 decoration:
                                     KtsAppWidgetStyles.fieldInputDdecoration(
-                                        'Payment Amount', 'e.g. £32.50',
+                                        'Refund Amount', 'e.g. £32.50',
                                         suffixIcon: KtsCustomAppIcons.coins,
                                         showInfo: false),
                                 autofillHints: const [AutofillHints.name],
-                                controller: paymentAmountController,
+                                controller: refundAmountController,
                                 inputFormatters: <TextInputFormatter>[
                                   DecimalTextInputFormatter(2)
                                 ],
@@ -202,7 +205,7 @@ class _PaymentDialogViewState extends State<PaymentDialogView> {
                                   paymentDateFocusNode.requestFocus();
                                 },
                               ),
-                              
+                                 
                               const SizedBox(height: 24),
                               TextButton(
                                   style: KtsAppWidgetStyles.roundButtonStyle(

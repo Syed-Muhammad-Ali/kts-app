@@ -2,7 +2,7 @@
     package="co.uk.ktsbookkeeping">
     <uses-permission android:name="com.android.vending.BILLING"/>
    <application
-        android:label="KTS BookKeeping"
+        android:label="KTS BookKeeping beta"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:screenOrientation="portrait">

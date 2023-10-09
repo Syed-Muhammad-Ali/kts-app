@@ -21,6 +21,7 @@ part 'appointment_dto.g.dart';
 /// * [cost] 
 /// * [deposit] 
 /// * [remainingBalance] 
+/// * [tip] 
 @BuiltValue()
 abstract class AppointmentDto implements Built<AppointmentDto, AppointmentDtoBuilder> {
   @BuiltValueField(wireName: r'id')
@@ -46,6 +47,9 @@ abstract class AppointmentDto implements Built<AppointmentDto, AppointmentDtoBui
 
   @BuiltValueField(wireName: r'remainingBalance')
   num get remainingBalance;
+
+  @BuiltValueField(wireName: r'tip')
+  int get tip;
 
   AppointmentDto._();
 
@@ -113,6 +117,11 @@ class _$AppointmentDtoSerializer implements PrimitiveSerializer<AppointmentDto> 
     yield serializers.serialize(
       object.remainingBalance,
       specifiedType: const FullType(num),
+    );
+    yield r'tip';
+    yield serializers.serialize(
+      object.tip,
+      specifiedType: const FullType(int),
     );
   }
 
@@ -193,6 +202,13 @@ class _$AppointmentDtoSerializer implements PrimitiveSerializer<AppointmentDto> 
           ) as num;
           result.remainingBalance = valueDes;
           break;
+        case r'tip':
+        final valueDes = serializers.deserialize(
+          serializedList[i + 1],
+          specifiedType: const FullType(int),
+        ) as int;
+        result.tip = valueDes;
+          break; 
         default:
           unhandled.add(key);
           unhandled.add(value);

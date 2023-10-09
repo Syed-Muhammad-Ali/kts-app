@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: override_on_non_overriding_member
+
 part of 'appointment_dto.dart';
 
 // **************************************************************************
@@ -23,6 +25,9 @@ class _$AppointmentDto extends AppointmentDto {
   final num deposit;
   @override
   final num remainingBalance;
+  @override
+  final int tip;
+ 
 
   factory _$AppointmentDto([void Function(AppointmentDtoBuilder)? updates]) =>
       (new AppointmentDtoBuilder()..update(updates))._build();
@@ -35,7 +40,9 @@ class _$AppointmentDto extends AppointmentDto {
       this.services,
       required this.cost,
       required this.deposit,
-      required this.remainingBalance})
+      required this.remainingBalance,
+      required this.tip
+      })
       : super._() {
     BuiltValueNullFieldError.checkNotNull(id, r'AppointmentDto', 'id');
     BuiltValueNullFieldError.checkNotNull(
@@ -47,6 +54,7 @@ class _$AppointmentDto extends AppointmentDto {
         deposit, r'AppointmentDto', 'deposit');
     BuiltValueNullFieldError.checkNotNull(
         remainingBalance, r'AppointmentDto', 'remainingBalance');
+    BuiltValueNullFieldError.checkNotNull(tip, r'AppointmentDto', 'tip');
   }
 
   @override
@@ -68,7 +76,9 @@ class _$AppointmentDto extends AppointmentDto {
         services == other.services &&
         cost == other.cost &&
         deposit == other.deposit &&
-        remainingBalance == other.remainingBalance;
+        remainingBalance == other.remainingBalance ;
+        // &&
+        // tip == other.tip; // Check for 'tip
   }
 
   @override
@@ -82,6 +92,7 @@ class _$AppointmentDto extends AppointmentDto {
     _$hash = $jc(_$hash, cost.hashCode);
     _$hash = $jc(_$hash, deposit.hashCode);
     _$hash = $jc(_$hash, remainingBalance.hashCode);
+    _$hash = $jc(_$hash, tip.hashCode); // Include 'tip' in the hashCode calculation
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -96,8 +107,9 @@ class _$AppointmentDto extends AppointmentDto {
           ..add('services', services)
           ..add('cost', cost)
           ..add('deposit', deposit)
-          ..add('remainingBalance', remainingBalance))
-        .toString();
+          ..add('remainingBalance', remainingBalance)
+          // ..add('tip', tip)
+          ).toString();
   }
 }
 
@@ -108,6 +120,7 @@ class AppointmentDtoBuilder
   int? _id;
   int? get id => _$this._id;
   set id(int? id) => _$this._id = id;
+  
 
   DateTime? _startDateTime;
   DateTime? get startDateTime => _$this._startDateTime;
@@ -140,6 +153,10 @@ class AppointmentDtoBuilder
   num? get remainingBalance => _$this._remainingBalance;
   set remainingBalance(num? remainingBalance) =>
       _$this._remainingBalance = remainingBalance;
+  
+  int? _tip;
+  int? get tip => _$this._tip;
+  set tip(int? tip) => _$this._tip = tip;
 
   AppointmentDtoBuilder() {
     AppointmentDto._defaults(this);
@@ -156,6 +173,7 @@ class AppointmentDtoBuilder
       _cost = $v.cost;
       _deposit = $v.deposit;
       _remainingBalance = $v.remainingBalance;
+      _tip=$v.tip;
       _$v = null;
     }
     return this;
@@ -193,7 +211,10 @@ class AppointmentDtoBuilder
               deposit: BuiltValueNullFieldError.checkNotNull(
                   deposit, r'AppointmentDto', 'deposit'),
               remainingBalance: BuiltValueNullFieldError.checkNotNull(
-                  remainingBalance, r'AppointmentDto', 'remainingBalance'));
+                  remainingBalance, r'AppointmentDto', 'remainingBalance'),
+              tip: BuiltValueNullFieldError.checkNotNull(
+                  tip, r'AppointmentDto', 'tip')    
+                  );
     } catch (_) {
       late String _$failedField;
       try {

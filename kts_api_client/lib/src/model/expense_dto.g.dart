@@ -22,6 +22,8 @@ class _$ExpenseDto extends ExpenseDto {
   @override
   final String? supplier;
   @override
+  final String? recurring;
+  @override
   final FileDto? receipt;
 
   factory _$ExpenseDto([void Function(ExpenseDtoBuilder)? updates]) =>
@@ -35,6 +37,7 @@ class _$ExpenseDto extends ExpenseDto {
       required this.paymentMethod,
       required this.paidDateTime,
       this.supplier,
+      this.recurring,
       this.receipt})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(amount, r'ExpenseDto', 'amount');
@@ -63,7 +66,8 @@ class _$ExpenseDto extends ExpenseDto {
         paymentMethod == other.paymentMethod &&
         paidDateTime == other.paidDateTime &&
         supplier == other.supplier &&
-        receipt == other.receipt;
+        receipt == other.receipt  &&
+        recurring == other.recurring;
   }
 
   @override
@@ -76,6 +80,7 @@ class _$ExpenseDto extends ExpenseDto {
     _$hash = $jc(_$hash, paymentMethod.hashCode);
     _$hash = $jc(_$hash, paidDateTime.hashCode);
     _$hash = $jc(_$hash, supplier.hashCode);
+    _$hash = $jc(_$hash, recurring.hashCode);
     _$hash = $jc(_$hash, receipt.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
@@ -91,6 +96,7 @@ class _$ExpenseDto extends ExpenseDto {
           ..add('paymentMethod', paymentMethod)
           ..add('paidDateTime', paidDateTime)
           ..add('supplier', supplier)
+          ..add('recurring', recurring)
           ..add('receipt', receipt))
         .toString();
   }
@@ -131,6 +137,10 @@ class ExpenseDtoBuilder implements Builder<ExpenseDto, ExpenseDtoBuilder> {
   String? get supplier => _$this._supplier;
   set supplier(String? supplier) => _$this._supplier = supplier;
 
+  String? _recurring;
+  String? get recurring => _$this._recurring;
+  set recurring(String? recurring) => _$this._recurring = recurring;
+
   FileDtoBuilder? _receipt;
   FileDtoBuilder get receipt => _$this._receipt ??= new FileDtoBuilder();
   set receipt(FileDtoBuilder? receipt) => _$this._receipt = receipt;
@@ -149,6 +159,7 @@ class ExpenseDtoBuilder implements Builder<ExpenseDto, ExpenseDtoBuilder> {
       _paymentMethod = $v.paymentMethod;
       _paidDateTime = $v.paidDateTime;
       _supplier = $v.supplier;
+       _recurring = $v.recurring;
       _receipt = $v.receipt?.toBuilder();
       _$v = null;
     }
@@ -185,6 +196,7 @@ class ExpenseDtoBuilder implements Builder<ExpenseDto, ExpenseDtoBuilder> {
               paidDateTime: BuiltValueNullFieldError.checkNotNull(
                   paidDateTime, r'ExpenseDto', 'paidDateTime'),
               supplier: supplier,
+              recurring:recurring,
               receipt: _receipt?.build());
     } catch (_) {
       late String _$failedField;

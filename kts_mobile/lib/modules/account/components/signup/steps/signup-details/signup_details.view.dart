@@ -200,7 +200,7 @@ class _SignupDetailsViewState extends State<SignupDetailsView> {
               autofillHints: const [AutofillHints.name],
               controller: emailTextController,
               onEditingComplete: () {
-                confirmEmailFocusNode.requestFocus();
+                nameFocusNode.requestFocus();
               },
             ),
             SizedBox(height: 30),
@@ -238,67 +238,83 @@ class _SignupDetailsViewState extends State<SignupDetailsView> {
               style: KtsAppWidgetStyles.fieldTextStyle(),
               decoration: KtsAppWidgetStyles.fieldInputDdecoration(
                   'Name', 'Enter your full name including any middle names',
-                  suffixIcon: Icons.person, suffixIconSize: 24),
+                  suffixIcon: Icons.person,
+                   suffixIconSize: 24,
+                        showInfo: true,
+                   showInfoCalback: () {
+                _showInfoDialog(InfoPromptConstants.urtText);
+              }
+                  ),
               autofillHints: const [AutofillHints.name],
               controller: nameTextController,
               onEditingComplete: () {
                 countryOfResidenceFocusNode.requestFocus();
               },
+               onSaved: (newValue) {
+                widget.onSave(SignupDetailsFormData(
+                    emailTextController.text,
+                    nameTextController.text,
+                    _selectCountryOfResidence!,
+                    selectedDob,
+                    address,
+                    ninoTextController.text,
+                    utrTextController.text));
+              },
             ),
-            SizedBox(height: 30),
-            TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                textInputAction: TextInputAction.next,
-                focusNode: dobFocusNode,
-                validator: MultiValidator([
-                  //RequiredValidator(errorText: "Date of Birth is required"),
-                ]),
-                style: KtsAppWidgetStyles.fieldTextStyle(),
-                decoration: KtsAppWidgetStyles.fieldInputDdecoration(
-                    'DOB', 'e.g. 17/04/1985',
-                    suffixIcon: KtsCustomAppIcons.calendar_plus_o,
-                    suffixIconSize: 18),
-                autofillHints: const [AutofillHints.birthday],
-                controller: dobTextController,
-                readOnly: true, // when true user cannot edit text
-                onTap: () async {
-                  selectedDob = await showDatePicker(
-                    context: context,
-                    initialDate: selectedDob ?? DateTime.now(),
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                  );
+            // SizedBox(height: 30),
+            // TextFormField(
+            //     autovalidateMode: AutovalidateMode.onUserInteraction,
+            //     textInputAction: TextInputAction.next,
+            //     focusNode: dobFocusNode,
+            //     validator: MultiValidator([
+            //       //RequiredValidator(errorText: "Date of Birth is required"),
+            //     ]),
+            //     style: KtsAppWidgetStyles.fieldTextStyle(),
+            //     decoration: KtsAppWidgetStyles.fieldInputDdecoration(
+            //         'DOB', 'e.g. 17/04/1985',
+            //         suffixIcon: KtsCustomAppIcons.calendar_plus_o,
+            //         suffixIconSize: 18),
+            //     autofillHints: const [AutofillHints.birthday],
+            //     controller: dobTextController,
+            //     readOnly: true, // when true user cannot edit text
+            //     onTap: () async {
+            //       selectedDob = await showDatePicker(
+            //         context: context,
+            //         initialDate: selectedDob ?? DateTime.now(),
+            //         firstDate: DateTime(1900),
+            //         lastDate: DateTime.now(),
+            //       );
 
-                  if (selectedDob != null) {
-                    addressFocusNode.requestFocus();
-                  }
-                }),
-            SizedBox(height: 24),
-            TextFormField(
-              onTap: () {
-                _addressDialogBuilder(context);
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              textInputAction: TextInputAction.next,
-              focusNode: addressFocusNode,
-              readOnly: true,
-              textCapitalization: TextCapitalization.words,
-              validator: MultiValidator([
-                //RequiredValidator(errorText: "Address is required"),
-              ]),
-              style: KtsAppWidgetStyles.fieldTextStyle(),
-              decoration: KtsAppWidgetStyles.fieldInputDdecoration('Address',
-                  'House or flat number, Street, Town or City & Postcode',
-                  suffixIcon: KtsCustomAppIcons.location_on,
-                  suffixIconSize: 22),
-              autofillHints: const [AutofillHints.fullStreetAddress],
-              controller: addresssTextController,
-              minLines: 3,
-              maxLines: 3,
-              onEditingComplete: () {
-                countryOfResidenceFocusNode.requestFocus();
-              },
-            ),
+            //       if (selectedDob != null) {
+            //         addressFocusNode.requestFocus();
+            //       }
+            //     }),
+            // SizedBox(height: 24),
+            // TextFormField(
+            //   onTap: () {
+            //     _addressDialogBuilder(context);
+            //   },
+            //   autovalidateMode: AutovalidateMode.onUserInteraction,
+            //   textInputAction: TextInputAction.next,
+            //   focusNode: addressFocusNode,
+            //   readOnly: true,
+            //   textCapitalization: TextCapitalization.words,
+            //   validator: MultiValidator([
+            //     //RequiredValidator(errorText: "Address is required"),
+            //   ]),
+            //   style: KtsAppWidgetStyles.fieldTextStyle(),
+            //   decoration: KtsAppWidgetStyles.fieldInputDdecoration('Address',
+            //       'House or flat number, Street, Town or City & Postcode',
+            //       suffixIcon: KtsCustomAppIcons.location_on,
+            //       suffixIconSize: 22),
+            //   autofillHints: const [AutofillHints.fullStreetAddress],
+            //   controller: addresssTextController,
+            //   minLines: 3,
+            //   maxLines: 3,
+            //   onEditingComplete: () {
+            //     countryOfResidenceFocusNode.requestFocus();
+            //   },
+            // ),
             SizedBox(height: 24),
             DropdownButtonFormField<Country>(
                 value: _selectCountryOfResidence,
@@ -318,7 +334,7 @@ class _SignupDetailsViewState extends State<SignupDetailsView> {
                   setState(() {
                     _selectCountryOfResidence = value!;
                     if (_selectCountryOfResidence != null) {
-                      ninoFocusNode.requestFocus();
+                      // ninoFocusNode.requestFocus();
                     }
                   });
                 },
@@ -342,59 +358,62 @@ class _SignupDetailsViewState extends State<SignupDetailsView> {
                       "Wales",
                     ),
                   ),
+                  
                 ]),
-            SizedBox(height: 30),
-            TextFormField(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              textInputAction: TextInputAction.next,
-              focusNode: ninoFocusNode,
-              textCapitalization: TextCapitalization.characters,
-              validator: MultiValidator([
-                //RequiredValidator(errorText: "Nino is required"),
-                MaxLengthValidator(9,
-                    errorText: "Nino must be 9 or less characters")
-              ]),
-              style: KtsAppWidgetStyles.fieldTextStyle(),
-              decoration: KtsAppWidgetStyles.fieldInputDdecoration(
-                  'National Insurence Number (NINO)', 'e.g. HJ/55/12/89/T',
-                  suffixIcon: KtsCustomAppIcons.address_card,
-                  suffixIconSize: 17),
-              autofillHints: const [AutofillHints.name],
-              controller: ninoTextController,
-              onEditingComplete: () {
-                utrFocusNode.requestFocus();
-              },
-            ),
-            SizedBox(height: 24),
-            TextFormField(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              textInputAction: TextInputAction.next,
-              focusNode: utrFocusNode,
-              textCapitalization: TextCapitalization.characters,
-              validator: MultiValidator([
-                //RequiredValidator(errorText: "UTR is required"),
-              ]),
-              style: KtsAppWidgetStyles.fieldTextStyle(),
-              decoration: KtsAppWidgetStyles.fieldInputDdecoration(
-                  'Unique Tax Payer Reference (UTR)', 'e.g. 3639259138',
-                  suffixIcon: KtsCustomAppIcons.money_bill_wave_alt,
-                  suffixIconSize: 17,
-                  showInfo: true, showInfoCalback: () {
-                _showInfoDialog(InfoPromptConstants.urtText);
-              }),
-              autofillHints: const [AutofillHints.name],
-              controller: utrTextController,
-              onSaved: (newValue) {
-                widget.onSave(SignupDetailsFormData(
-                    emailTextController.text,
-                    nameTextController.text,
-                    _selectCountryOfResidence!,
-                    selectedDob,
-                    address,
-                    ninoTextController.text,
-                    utrTextController.text));
-              },
-            ),
+            // SizedBox(height: 30),
+            // TextFormField(
+            //   autovalidateMode: AutovalidateMode.onUserInteraction,
+            //   textInputAction: TextInputAction.next,
+            //   focusNode: ninoFocusNode,
+            //   textCapitalization: TextCapitalization.characters,
+            //   validator: MultiValidator([
+            //     //RequiredValidator(errorText: "Nino is required"),
+            //     MaxLengthValidator(9,
+            //         errorText: "Nino must be 9 or less characters")
+            //   ]),
+            //   style: KtsAppWidgetStyles.fieldTextStyle(),
+            //   decoration: KtsAppWidgetStyles.fieldInputDdecoration(
+            //       'National Insurence Number (NINO)', 'e.g. HJ/55/12/89/T',
+            //       suffixIcon: KtsCustomAppIcons.address_card,
+            //       suffixIconSize: 17),
+            //   autofillHints: const [AutofillHints.name],
+            //   controller: ninoTextController,
+            //   onEditingComplete: () {
+            //     utrFocusNode.requestFocus();
+            //   },
+            // ),
+            // SizedBox(height: 24),
+            // TextFormField(
+            //   autovalidateMode: AutovalidateMode.onUserInteraction,
+            //   textInputAction: TextInputAction.next,
+            //   focusNode: utrFocusNode,
+            //   textCapitalization: TextCapitalization.characters,
+            //   validator: MultiValidator([
+            //     //RequiredValidator(errorText: "UTR is required"),
+            //   ]),
+            //   style: KtsAppWidgetStyles.fieldTextStyle(),
+            //   decoration: KtsAppWidgetStyles.fieldInputDdecoration(
+            //       'Unique Tax Payer Reference (UTR)', 'e.g. 3639259138',
+            //       suffixIcon: KtsCustomAppIcons.money_bill_wave_alt,
+            //       suffixIconSize: 17,
+            //       showInfo: true,
+            //        showInfoCalback: () {
+            //     _showInfoDialog(InfoPromptConstants.urtText);
+            //   }
+            //   ),
+            //   autofillHints: const [AutofillHints.name],
+            //   controller: utrTextController,
+            //   onSaved: (newValue) {
+            //     widget.onSave(SignupDetailsFormData(
+            //         emailTextController.text,
+            //         nameTextController.text,
+            //         _selectCountryOfResidence!,
+            //         selectedDob,
+            //         address,
+            //         ninoTextController.text,
+            //         utrTextController.text));
+            //   },
+            // ),
           ]),
         ),
       ],

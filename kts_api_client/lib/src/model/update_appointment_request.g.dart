@@ -22,6 +22,8 @@ class _$UpdateAppointmentRequest extends UpdateAppointmentRequest {
   @override
   final num cost;
   @override
+  final int tip;
+  @override
   final BuiltList<Payment2>? addPayments;
   @override
   final BuiltList<int>? removePayments;
@@ -38,6 +40,7 @@ class _$UpdateAppointmentRequest extends UpdateAppointmentRequest {
       required this.endDateTime,
       required this.depositAmount,
       required this.cost,
+      required this.tip,
       this.addPayments,
       this.removePayments})
       : super._() {
@@ -55,6 +58,7 @@ class _$UpdateAppointmentRequest extends UpdateAppointmentRequest {
         depositAmount, r'UpdateAppointmentRequest', 'depositAmount');
     BuiltValueNullFieldError.checkNotNull(
         cost, r'UpdateAppointmentRequest', 'cost');
+    BuiltValueNullFieldError.checkNotNull(tip, r'AppointmentDto', 'tip');    
   }
 
   @override
@@ -77,6 +81,7 @@ class _$UpdateAppointmentRequest extends UpdateAppointmentRequest {
         endDateTime == other.endDateTime &&
         depositAmount == other.depositAmount &&
         cost == other.cost &&
+        tip == other.tip && // Check for 'tip
         addPayments == other.addPayments &&
         removePayments == other.removePayments;
   }
@@ -91,6 +96,7 @@ class _$UpdateAppointmentRequest extends UpdateAppointmentRequest {
     _$hash = $jc(_$hash, endDateTime.hashCode);
     _$hash = $jc(_$hash, depositAmount.hashCode);
     _$hash = $jc(_$hash, cost.hashCode);
+    _$hash = $jc(_$hash, tip.hashCode); // Include 'tip' in the hashCode calculation
     _$hash = $jc(_$hash, addPayments.hashCode);
     _$hash = $jc(_$hash, removePayments.hashCode);
     _$hash = $jf(_$hash);
@@ -107,6 +113,7 @@ class _$UpdateAppointmentRequest extends UpdateAppointmentRequest {
           ..add('endDateTime', endDateTime)
           ..add('depositAmount', depositAmount)
           ..add('cost', cost)
+          ..add('tip', tip)
           ..add('addPayments', addPayments)
           ..add('removePayments', removePayments))
         .toString();
@@ -148,6 +155,10 @@ class UpdateAppointmentRequestBuilder
   num? get cost => _$this._cost;
   set cost(num? cost) => _$this._cost = cost;
 
+  int? _tip;
+  int? get tip => _$this._tip;
+  set tip(int? tip) => _$this._tip = tip;
+
   ListBuilder<Payment2>? _addPayments;
   ListBuilder<Payment2> get addPayments =>
       _$this._addPayments ??= new ListBuilder<Payment2>();
@@ -174,6 +185,7 @@ class UpdateAppointmentRequestBuilder
       _endDateTime = $v.endDateTime;
       _depositAmount = $v.depositAmount;
       _cost = $v.cost;
+      _tip=$v.tip;
       _addPayments = $v.addPayments?.toBuilder();
       _removePayments = $v.removePayments?.toBuilder();
       _$v = null;
@@ -213,7 +225,9 @@ class UpdateAppointmentRequestBuilder
               depositAmount: BuiltValueNullFieldError.checkNotNull(
                   depositAmount, r'UpdateAppointmentRequest', 'depositAmount'),
               cost: BuiltValueNullFieldError.checkNotNull(
-                  cost, r'UpdateAppointmentRequest', 'cost'),
+                  cost, r'UpdateAppointmentRequest', 'cost'), 
+              tip: BuiltValueNullFieldError.checkNotNull(
+                  tip, r'AppointmentDto', 'tip'),
               addPayments: _addPayments?.build(),
               removePayments: _removePayments?.build());
     } catch (_) {

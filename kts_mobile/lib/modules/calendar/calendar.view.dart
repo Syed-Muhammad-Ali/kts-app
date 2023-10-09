@@ -15,25 +15,24 @@ import 'package:kts_mobile/common/theme/theme_styles.dart';
 import 'package:kts_mobile/main.dart';
 import 'package:kts_mobile/modules/calendar/search.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
 
-class CalendarView extends StatefulWidget {
+class CalendarViewScreen extends StatefulWidget {
   final KtsBookingApi apiClient;
   final Stream<void> fabStream;
   final StreamController<void> showAdd;
   final DateTime? initalDateTime;
 
-  CalendarView(this.apiClient, this.fabStream, this.showAdd,
+  CalendarViewScreen(this.apiClient, this.fabStream, this.showAdd,
       {Key? key, this.initalDateTime})
       : super(key: key) {
     this.showAdd.add(true);
   }
 
   @override
-  State<CalendarView> createState() => _CalendarViewState();
+  State<CalendarViewScreen> createState() => _CalendarViewScreenState();
 }
 
-class _CalendarViewState extends State<CalendarView> {
+class _CalendarViewScreenState extends State<CalendarViewScreen> {
   DateTime _launchDate = new DateTime(2023, 04, 06);
 
   int selectedYear = 2023;
@@ -219,9 +218,10 @@ class _CalendarViewState extends State<CalendarView> {
     widget.apiClient
         .getAccountReadApi()
         .accountReadGetAppointments(
-            start: startDate.toUtc(),
-            end: endDate.toUtc(),
-            cancelToken: cancelToken)
+          start: startDate.toUtc(),
+          end: endDate.toUtc(),
+          cancelToken: cancelToken,
+        )
         .then((value) {
       if (value.data != null && value.data!.appointments != null) {
         monthAppointments = value.data!.appointments!.toList(growable: true);
@@ -288,219 +288,252 @@ class _CalendarViewState extends State<CalendarView> {
     return Stack(
       children: [
         SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                  image: AssetImage("images/kts-background.png"),
-                  fit: BoxFit.cover,
-                )))),
-        SafeArea(
-            child: Padding(
-                padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.only(bottom: 12),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Calendar",
-                                style: TextStyle(
-                                    color: ThemeColors.lightPink,
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                  width: 75,
-                                  height: 50,
-                                  child: DropdownButtonFormField<int?>(
-                                    value: selectedYear,
-                                    icon: const Padding(
-                                        padding: EdgeInsets.only(right: 0),
-                                        child: const Icon(Icons
-                                            .arrow_drop_down_circle_outlined)),
-                                    isExpanded: true,
-                                    isDense: true,
-                                    iconEnabledColor: ThemeColors.darkPink,
-                                    dropdownColor: ThemeColors.darkGrey,
-                                    style: KtsAppWidgetStyles.fieldTextStyle(),
-                                    decoration: InputDecoration(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("images/kts-background.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: SafeArea(
+                child: Padding(
+                    padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.only(bottom: 12),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Calendar",
+                                    style: TextStyle(
+                                        color: ThemeColors.lightPink,
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(
+                                      width: 75,
+                                      height: 50,
+                                      child: DropdownButtonFormField<int?>(
+                                        value: selectedYear,
+                                        icon: const Padding(
+                                            padding: EdgeInsets.only(right: 0),
+                                            child: const Icon(Icons
+                                                .arrow_drop_down_circle_outlined)),
+                                        isExpanded: true,
                                         isDense: true,
-                                        labelStyle: const TextStyle(
-                                            color: ThemeColors.light,
-                                            fontFamily:
-                                                KtsAppWidgetStyles.fontFamily,
-                                            fontSize: 15),
-                                        floatingLabelBehavior:
-                                            FloatingLabelBehavior.always,
-                                        enabledBorder:
-                                            const UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Colors.transparent,
-                                              width: 0),
-                                        ),
-                                        focusedBorder:
-                                            const UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            width: 0.0,
-                                            color: Colors.transparent,
-                                          ),
-                                        )),
-                                    onChanged: (value) =>
-                                        {_yearSelected(value!)},
-                                    items: years.map<DropdownMenuItem<int>>(
-                                        (int value) {
-                                      return DropdownMenuItem<int>(
-                                        value: value,
-                                        child: Text(value.toString()),
-                                      );
-                                    }).toList(),
-                                  )),
-                            ])),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const searchScreen()));
-                      },
-                      child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(25)),
-                              color: ThemeColors.darkGrey),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 5),
-                                child: Icon(
-                                  Icons.search,
-                                  color: ThemeColors.darkPink,
-                                  size: 24,
+                                        iconEnabledColor: ThemeColors.darkPink,
+                                        dropdownColor: ThemeColors.darkGrey,
+                                        style:
+                                            KtsAppWidgetStyles.fieldTextStyle(),
+                                        decoration: InputDecoration(
+                                            isDense: true,
+                                            labelStyle: const TextStyle(
+                                                color: ThemeColors.light,
+                                                fontFamily: KtsAppWidgetStyles
+                                                    .fontFamily,
+                                                fontSize: 15),
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
+                                            enabledBorder:
+                                                const UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.transparent,
+                                                  width: 0),
+                                            ),
+                                            focusedBorder:
+                                                const UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                width: 0.0,
+                                                color: Colors.transparent,
+                                              ),
+                                            )),
+                                        onChanged: (value) =>
+                                            {_yearSelected(value!)},
+                                        items: years.map<DropdownMenuItem<int>>(
+                                            (int value) {
+                                          return DropdownMenuItem<int>(
+                                            value: value,
+                                            child: Text(value.toString()),
+                                          );
+                                        }).toList(),
+                                      )),
+                                ])),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const searchScreen()));
+                          },
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(25)),
+                                color: ThemeColors.darkGrey),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 10, right: 5),
+                                  child: Icon(
+                                    Icons.search,
+                                    color: ThemeColors.darkPink,
+                                    size: 24,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                "Search Appoinment",
-                                style: TextStyle(
-                                    fontSize: 12.0,
-                                    fontFamily: "Montserrat",
-                                    color: ThemeColors.grey10,
-                                    fontWeight: FontWeight.w400),
-                              )
-                            ],
+                                SizedBox(width: 10),
+                                Text(
+                                  "Search Appoinment",
+                                  style: TextStyle(
+                                      fontSize: 12.0,
+                                      fontFamily: "Montserrat",
+                                      color: ThemeColors.grey10,
+                                      fontWeight: FontWeight.w400),
+                                )
+                              ],
+                            ),
                           ),
-                          ),
-                    ),
-                    SizedBox(
-                      height: 50,
-                      child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          controller: _monthScrollController,
-                          itemBuilder: ((context, index) {
-                            var date = new DateTime(selectedYear, index + 1, 1);
-                            return TextButton(
-                                onPressed: () {
-                                  _monthSelected(date.month);
-                                },
-                                child: Text("${DateFormat.MMMM().format(date)}",
-                                    style: selectedMonth == date.month
-                                        ? TextStyle(
-                                            color: ThemeColors.light,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w700,
-                                            fontFamily:
-                                                KtsAppWidgetStyles.fontFamily)
-                                        : TextStyle(
-                                            color: ThemeColors.light50,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: KtsAppWidgetStyles
-                                                .fontFamily)));
-                          }),
-                          separatorBuilder: ((context, index) => const SizedBox(
-                                width: 0,
-                              )),
-                          itemCount: 12),
-                    ),
-                    SizedBox(
-                      height: 100,
-                      child: ListView.separated(
-                          controller: _dayScrollController,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: ((context, index) {
-                            var date = dates[index];
-                            return SizedBox(
-                                width: 55,
-                                child: TextButton(
+                        ),
+                        SizedBox(
+                          height: 50,
+                          child: ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              controller: _monthScrollController,
+                              itemBuilder: ((context, index) {
+                                var date =
+                                    new DateTime(selectedYear, index + 1, 1);
+                                return TextButton(
                                     onPressed: () {
-                                      _daySelected(date);
+                                      _monthSelected(date.month);
                                     },
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            width: 40,
-                                            height: 40,
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(20)),
-                                                color: selectedDate == date
-                                                    ? ThemeColors.darkPink
-                                                    : today == date
-                                                        ? ThemeColors.darkPink50
-                                                        : null),
-                                            child: Align(
-                                                alignment: Alignment.center,
-                                                child: Text(date.day.toString(),
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontSize: 13,
-                                                        fontFamily:
-                                                            KtsAppWidgetStyles
-                                                                .fontFamily,
-                                                        fontWeight:
-                                                            selectedDate == date
-                                                                ? FontWeight
-                                                                    .w700
-                                                                : FontWeight
-                                                                    .w300,
-                                                        color: selectedDate ==
-                                                                date
-                                                            ? Color(0xFF505050)
-                                                            : ThemeColors
-                                                                .light)))),
-                                        SizedBox(height: 12),
-                                        Text(DateFormat('EEE').format(date),
-                                            style: selectedDate == date
-                                                ? KtsAppWidgetStyles
-                                                    .calendarCurrentDayTextStyle()
-                                                : KtsAppWidgetStyles
-                                                    .calendarDayTextStyle())
-                                      ],
-                                    )));
-                          }),
-                          separatorBuilder: ((context, index) => const SizedBox(
-                                width: 0,
-                              )),
-                          itemCount: dates.length),
-                    ),
-                    Expanded(
-                      child: SfCalendarTheme(
-                          data: SfCalendarThemeData(
-                            displayNameTextStyle: TextStyle(color: Colors.blue),
-                            brightness: Brightness.dark,
-                            allDayPanelColor: Colors.yellow,
-                            leadingDatesBackgroundColor: Colors.pink,
-                          ),
+                                    child: Text(
+                                        "${DateFormat.MMMM().format(date)}",
+                                        style: selectedMonth == date.month
+                                            ? TextStyle(
+                                                color: ThemeColors.light,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700,
+                                                fontFamily: KtsAppWidgetStyles
+                                                    .fontFamily)
+                                            : TextStyle(
+                                                color: ThemeColors.light50,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: KtsAppWidgetStyles
+                                                    .fontFamily)));
+                              }),
+                              separatorBuilder: ((context, index) =>
+                                  const SizedBox(
+                                    width: 0,
+                                  )),
+                              itemCount: 12),
+                        ),
+                        SizedBox(
+                          height: 100,
+                          child: ListView.separated(
+                              controller: _dayScrollController,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: ((context, index) {
+                                var date = dates[index];
+                                return SizedBox(
+                                    width: 55,
+                                    child: TextButton(
+                                        onPressed: () {
+                                          _daySelected(date);
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                                width: 40,
+                                                height: 40,
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.all(
+                                                        Radius.circular(20)),
+                                                    color: selectedDate == date
+                                                        ? ThemeColors.darkPink
+                                                        : today == date
+                                                            ? ThemeColors
+                                                                .darkPink50
+                                                            : null
+                                                            ),
+                                                child: Align(
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                        date.day.toString(),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            fontSize: 13,
+                                                            fontFamily:
+                                                                KtsAppWidgetStyles
+                                                                    .fontFamily,
+                                                            fontWeight:
+                                                                selectedDate ==
+                                                                        date
+                                                                    ? FontWeight
+                                                                        .w700
+                                                                    : FontWeight
+                                                                        .w300,
+                                                            color: selectedDate ==
+                                                                    date
+                                                                ? Color(
+                                                                    0xFF505050)
+                                                                : ThemeColors
+                                                                    .light)))),
+                                            SizedBox(height: 12),
+                                            Text(DateFormat('EEE').format(date),
+                                                style: selectedDate == date
+                                                    ? KtsAppWidgetStyles
+                                                        .calendarCurrentDayTextStyle()
+                                                    : KtsAppWidgetStyles
+                                                        .calendarDayTextStyle())
+                                          ],
+                                        )));
+                              }),
+                              separatorBuilder: ((context, index) =>
+                                  const SizedBox(
+                                    width: 0,
+                                  )),
+                              itemCount: dates.length),
+                        ),
+                        Expanded(
                           child: SfCalendar(
+                            view: CalendarView.week,
+                      //  weekNumberStyle:  WeekNumberStyle(
+                      //   backgroundColor: Colors.white
+                      //  ),
+                            headerStyle: CalendarHeaderStyle(
+                              textStyle: TextStyle(
+                                  color: Colors
+                                      .transparent), // Change header text color
+                              // Change header background color
+                            ),
+                            scheduleViewSettings: ScheduleViewSettings(
+                                dayHeaderSettings: DayHeaderSettings(
+                             dayTextStyle: TextStyle(
+                              color: Colors.red
+                             ) ,
+                             dateTextStyle:TextStyle(
+                              color: Colors.red
+                             ) ,
+                            ) 
+                                ),
+                                // appointmentTextStyle: TextStyle(color: Colors.white,
+                                // backgroundColor: Colors.white
+                                // ),
+                                initialDisplayDate: _selectedDate,
+                                blackoutDatesTextStyle: TextStyle(color: Colors.white),
+                                weekNumberStyle:  WeekNumberStyle( backgroundColor: Colors.white),
+
                             controller: _calendarController,
                             timeRegionBuilder: (context, timeRegionDetails) {
                               return Container(color: Colors.blue);
@@ -529,7 +562,7 @@ class _CalendarViewState extends State<CalendarView> {
                                               color: appointment.appointment
                                                           .remainingBalance >
                                                       0
-                                                  ? ThemeColors.darkGrey
+                                                  ? Color(0xffE5E4E2)
                                                   : ThemeColors.darkPink,
                                               borderRadius:
                                                   BorderRadius.circular(12)),
@@ -595,22 +628,31 @@ class _CalendarViewState extends State<CalendarView> {
                                                     ),
                                                   ])))));
                             },
-                            headerHeight: 0,
+                            cellBorderColor: Color(0XFF9B9B9B),
+                            // headerHeight: 0,
                             timeSlotViewSettings: TimeSlotViewSettings(
-                                timeTextStyle: TextStyle(
-                                    color: Color(0XFF9B9B9B),
-                                    fontSize: 10,
-                                    fontFamily: KtsAppWidgetStyles.fontFamily,
-                                    fontWeight: FontWeight.w300),
-                                timeIntervalHeight: 50,
-                                timeFormat: 'h:mm a',
-                                dateFormat: 'd',
-                                dayFormat: 'EEE',
-                                timeRulerSize: 70,
-                                timeInterval: Duration(minutes: 15)),
-                            allowDragAndDrop: false,
-                            viewHeaderHeight: 0,
-                            allowAppointmentResize: false,
+                              timeTextStyle: TextStyle(
+                                  color: Color(0XFFE5E4E2),
+                                  fontSize: 12,
+                                  fontFamily: KtsAppWidgetStyles.fontFamily,
+                                  fontWeight: FontWeight.w300),
+                              // timeIntervalHeight: 50,
+                              // timeIntervalWidth: 50,
+                              // timeFormat: 'h:mm a',
+                              // dateFormat: 'd',
+                              // dayFormat: 'EEE',
+                              // timeRulerSize: 70,
+                              // timeInterval: Duration(minutes: 15),
+                            ),
+                            // allowDragAndDrop: false,
+                            // viewHeaderHeight: 40,
+                            // allowAppointmentResize: false,
+                            todayTextStyle: TextStyle(
+                             color : Colors.white,
+                             
+                              // Set text color to white for other dates and unselected today's date
+                            ),
+
                             onSelectionChanged: (calendarSelectionDetails) {
                               context.goNamed(
                                   KtsRoutingLinks
@@ -620,11 +662,14 @@ class _CalendarViewState extends State<CalendarView> {
                                         calendarSelectionDetails.date.toString()
                                   });
                             },
+
                             //specialRegions: _getTimeRegions(),
-                          )),
-                    )
-                  ],
-                ))),
+                          ),
+                        )
+                      ],
+                    ))),
+          ),
+        )
       ],
     );
   }

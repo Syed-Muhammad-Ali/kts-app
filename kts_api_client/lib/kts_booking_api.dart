@@ -82,3 +82,4 @@ export 'package:kts_booking_api/src/model/update_service_request.dart';
 export 'package:kts_booking_api/src/model/update_service_response.dart';
 export 'package:kts_booking_api/src/model/upload_file_response.dart';
 export 'package:kts_booking_api/src/model/welcome_notification_dto.dart';
+export 'package:kts_booking_api/src/model/summary_response.dart';

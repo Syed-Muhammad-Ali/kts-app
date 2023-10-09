@@ -77,6 +77,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(UpdateServiceResponse.serializer)
       ..add(UploadFileResponse.serializer)
       ..add(WelcomeNotificationDto.serializer)
+      ..add(SummaryResponse.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(AppointmentDto)]),
           () => new ListBuilder<AppointmentDto>())

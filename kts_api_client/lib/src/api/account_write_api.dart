@@ -466,7 +466,7 @@ class AccountWriteApi {
     try {
       const _type = FullType(CreateExpenseRequest);
       _bodyData = _serializers.serialize(request, specifiedType: _type);
-    print(request);
+    print("request: $request");
     } catch(error, stackTrace) {
       throw DioError(
          requestOptions: _options.compose(
@@ -1100,7 +1100,7 @@ class AccountWriteApi {
     try {
       const _type = FullType(DeleteServiceRequest);
       _bodyData = _serializers.serialize(request, specifiedType: _type);
-
+   print(request);
     } catch(error, stackTrace) {
       throw DioError(
          requestOptions: _options.compose(
@@ -1503,7 +1503,7 @@ class AccountWriteApi {
         _response.data!,
         specifiedType: _responseType,
       ) as UpdateAccountResponse;
-
+         print("_responseType : $_responseType");
     } catch (error, stackTrace) {
       throw DioError(
         requestOptions: _response.requestOptions,

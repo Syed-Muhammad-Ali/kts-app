@@ -1,13 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kts_booking_api/kts_booking_api.dart';
-import 'package:kts_mobile/common/forms/input-formatters/decimal_text_input_formatter.dart';
 import 'package:kts_mobile/common/theme/theme_colors.dart';
 import 'package:kts_mobile/common/theme/theme_styles.dart';
-import 'package:intl/intl.dart';
 import 'package:kts_mobile/modules/global/validation-error-prompt/validation-error-prompt.dart';
 
 class CustomerDialogView extends StatefulWidget {
@@ -130,105 +128,127 @@ class _CustomerDialogViewState extends State<CustomerDialogView> {
                 ),
                 color: ThemeColors.darkGrey,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: Padding(
-                padding: EdgeInsets.all(18),
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        "Customer",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            color: ThemeColors.lightPink,
-                            fontSize: 26,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        widget.customer == null
-                            ? "Add a customer"
-                            : "Update a customer",
-                        style: TextStyle(
-                            color: ThemeColors.light,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w300),
-                      ),
-                      const SizedBox(height: 12),
-                      Form(
-                          key: formKey,
-                          child: Column(
-                            children: [
-                              TextFormField(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                textInputAction: TextInputAction.next,
-                                focusNode: nameFocusNode,
-                                validator: MultiValidator([
-                                  RequiredValidator(
-                                      errorText: "Name is required"),
-                                ]),
-                                style: KtsAppWidgetStyles.fieldTextStyle(),
-                                decoration:
-                                    KtsAppWidgetStyles.fieldInputDdecoration(
-                                        'Name', 'e.g. Carly Smith',
-                                        //suffixIcon: KtsCustomAppIcons.coins,
-                                        showInfo: false),
-                                autofillHints: const [AutofillHints.name],
-                                controller: nameController,
-                                onEditingComplete: () {
-                                  mobileFocusNode.requestFocus();
-                                },
-                              ),
-                              const SizedBox(height: 24),
-                              TextFormField(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                textInputAction: TextInputAction.next,
-                                focusNode: mobileFocusNode,
-                                style: KtsAppWidgetStyles.fieldTextStyle(),
-                                decoration:
-                                    KtsAppWidgetStyles.fieldInputDdecoration(
-                                        'Mobile Number', 'e.g. 07589654123',
-                                        //suffixIcon: KtsCustomAppIcons.coins,
-                                        showInfo: false),
-                                autofillHints: const [
-                                  AutofillHints.telephoneNumber
-                                ],
-                                controller: mobileController,
-                                onEditingComplete: () {
-                                  emailFocusNode.requestFocus();
-                                },
-                              ),
-                              const SizedBox(height: 24),
-                              TextFormField(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                textInputAction: TextInputAction.done,
-                                focusNode: emailFocusNode,
-                                style: KtsAppWidgetStyles.fieldTextStyle(),
-                                decoration:
-                                    KtsAppWidgetStyles.fieldInputDdecoration(
-                                        'Email', 'e.g. carly.smith@gmail.com',
-                                        //suffixIcon: KtsCustomAppIcons.coins,
-                                        showInfo: false),
-                                autofillHints: const [AutofillHints.email],
-                                controller: emailController,
-                                onEditingComplete: () {},
-                              ),
-                              const SizedBox(height: 24),
-                              const SizedBox(height: 24),
-                              TextButton(
-                                  style: KtsAppWidgetStyles.roundButtonStyle(
-                                      ThemeColors.lightPink,
-                                      ThemeColors.darkText,
-                                      minSize: 30),
-                                  onPressed: () => confirm(),
-                                  child: Text("Save"))
-                            ],
-                          ))
-                    ]))),
+                      IconButton(
+                          onPressed: () => context.pop(),
+                          icon: Icon(
+                            Icons.close,
+                            color: ThemeColors.error,
+                            size: 32,
+                          )),
+                      SizedBox(),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 18,
+                      right: 18
+                    ),
+                    child: Text(
+                      "Customer",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: ThemeColors.lightPink,
+                          fontSize: 26,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 18, right: 18),
+                    child: Text(
+                      widget.customer == null
+                          ? "Add a customer"
+                          : "Update a customer",
+                      style: TextStyle(
+                          color: ThemeColors.light,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w300),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Form(
+                      key: formKey,
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              textInputAction: TextInputAction.next,
+                              focusNode: nameFocusNode,
+                              validator: MultiValidator([
+                                RequiredValidator(
+                                    errorText: "Name is required"),
+                              ]),
+                              style: KtsAppWidgetStyles.fieldTextStyle(),
+                              decoration:
+                                  KtsAppWidgetStyles.fieldInputDdecoration(
+                                      'Name', 'e.g. Carly Smith',
+                                      //suffixIcon: KtsCustomAppIcons.coins,
+                                      showInfo: false),
+                              autofillHints: const [AutofillHints.name],
+                              controller: nameController,
+                              onEditingComplete: () {
+                                mobileFocusNode.requestFocus();
+                              },
+                            ),
+                            const SizedBox(height: 24),
+                            TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              textInputAction: TextInputAction.next,
+                              focusNode: mobileFocusNode,
+                              style: KtsAppWidgetStyles.fieldTextStyle(),
+                              decoration:
+                                  KtsAppWidgetStyles.fieldInputDdecoration(
+                                      'Mobile Number', 'e.g. 07589654123',
+                                      //suffixIcon: KtsCustomAppIcons.coins,
+                                      showInfo: false),
+                              autofillHints: const [
+                                AutofillHints.telephoneNumber
+                              ],
+                              controller: mobileController,
+                              onEditingComplete: () {
+                                emailFocusNode.requestFocus();
+                              },
+                            ),
+                            const SizedBox(height: 24),
+                            TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              textInputAction: TextInputAction.done,
+                              focusNode: emailFocusNode,
+                              style: KtsAppWidgetStyles.fieldTextStyle(),
+                              decoration:
+                                  KtsAppWidgetStyles.fieldInputDdecoration(
+                                      'Email', 'e.g. carly.smith@gmail.com',
+                                      //suffixIcon: KtsCustomAppIcons.coins,
+                                      showInfo: false),
+                              autofillHints: const [AutofillHints.email],
+                              controller: emailController,
+                              onEditingComplete: () {},
+                            ),
+                            const SizedBox(height: 24),
+                            const SizedBox(height: 24),
+                            TextButton(
+                                style: KtsAppWidgetStyles.roundButtonStyle(
+                                    ThemeColors.lightPink, ThemeColors.darkText,
+                                    minSize: 30),
+                                onPressed: () => confirm(),
+                                child: Text("Save"))
+                          ],
+                        ),
+                      ))
+                ])),
       ),
     );
   }

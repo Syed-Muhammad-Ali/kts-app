@@ -7,9 +7,10 @@ import 'package:kts_mobile/common/theme/theme_colors.dart';
 import 'package:kts_mobile/common/theme/theme_styles.dart';
 
 class OverviewStats extends StatelessWidget {
-  OverviewStats(this.stats, {Key? key}) : super(key: key);
+  OverviewStats(this.stats, this.isForecasted, {Key? key}) : super(key: key);
   final currencyFormatter = new NumberFormat("#,##0.00", "en_GB");
   final AccountingPeriodOverviewStats stats;
+  final bool isForecasted;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +98,8 @@ class OverviewStats extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Tax and NI for year",
+                        Text(
+                          isForecasted ?  "Tax and NI for year" : "Tax and NI",
                             style: TextStyle(
                                 color: ThemeColors.darkPink,
                                 fontFamily: KtsAppWidgetStyles.fontFamily,
@@ -226,7 +228,7 @@ class OverviewStats extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Profit to year",
+                        Text(isForecasted ?  "Profit for year" : "Current profit",
                             style: TextStyle(
                                 color: ThemeColors.darkPink,
                                 fontFamily: KtsAppWidgetStyles.fontFamily,
@@ -320,7 +322,7 @@ class OverviewStats extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Income to year",
+                        Text(isForecasted ?  "Income for year" : "Current income" ,
                             style: TextStyle(
                                 color: ThemeColors.darkPink,
                                 fontFamily: KtsAppWidgetStyles.fontFamily,
@@ -394,7 +396,7 @@ class OverviewStats extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Expense to year",
+                        Text(isForecasted ? "Expense for year" :"Current expenses" ,
                             style: TextStyle(
                                 color: ThemeColors.darkPink,
                                 fontFamily: KtsAppWidgetStyles.fontFamily,

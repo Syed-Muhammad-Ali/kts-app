@@ -13,15 +13,18 @@ part 'create_appointment_request.g.dart';
 /// CreateAppointmentRequest
 ///
 /// Properties:
-/// * [startDateTime] 
-/// * [endDateTime] 
-/// * [customerId] 
-/// * [serviceId] 
-/// * [cost] 
-/// * [depositAmount] 
-/// * [payments] 
+/// * [startDateTime]
+/// * [endDateTime]
+/// * [customerId]
+/// * [serviceId]
+/// * [cost]
+/// * [depositAmount]
+/// * [tip]
+/// * [payments]
 @BuiltValue()
-abstract class CreateAppointmentRequest implements Built<CreateAppointmentRequest, CreateAppointmentRequestBuilder> {
+abstract class CreateAppointmentRequest
+    implements
+        Built<CreateAppointmentRequest, CreateAppointmentRequestBuilder> {
   @BuiltValueField(wireName: r'startDateTime')
   DateTime get startDateTime;
 
@@ -40,23 +43,33 @@ abstract class CreateAppointmentRequest implements Built<CreateAppointmentReques
   @BuiltValueField(wireName: r'depositAmount')
   num get depositAmount;
 
+  @BuiltValueField(wireName: r'tip')
+  int get tip;
+
   @BuiltValueField(wireName: r'payments')
   BuiltList<Payment>? get payments;
 
   CreateAppointmentRequest._();
 
-  factory CreateAppointmentRequest([void updates(CreateAppointmentRequestBuilder b)]) = _$CreateAppointmentRequest;
+  factory CreateAppointmentRequest(
+          [void updates(CreateAppointmentRequestBuilder b)]) =
+      _$CreateAppointmentRequest;
 
   @BuiltValueHook(initializeBuilder: true)
   static void _defaults(CreateAppointmentRequestBuilder b) => b;
 
   @BuiltValueSerializer(custom: true)
-  static Serializer<CreateAppointmentRequest> get serializer => _$CreateAppointmentRequestSerializer();
+  static Serializer<CreateAppointmentRequest> get serializer =>
+      _$CreateAppointmentRequestSerializer();
 }
 
-class _$CreateAppointmentRequestSerializer implements PrimitiveSerializer<CreateAppointmentRequest> {
+class _$CreateAppointmentRequestSerializer
+    implements PrimitiveSerializer<CreateAppointmentRequest> {
   @override
-  final Iterable<Type> types = const [CreateAppointmentRequest, _$CreateAppointmentRequest];
+  final Iterable<Type> types = const [
+    CreateAppointmentRequest,
+    _$CreateAppointmentRequest
+  ];
 
   @override
   final String wireName = r'CreateAppointmentRequest';
@@ -96,6 +109,11 @@ class _$CreateAppointmentRequestSerializer implements PrimitiveSerializer<Create
       object.depositAmount,
       specifiedType: const FullType(num),
     );
+    yield r'tip';
+    yield serializers.serialize(
+      object.tip,
+      specifiedType: const FullType(int),
+    );
     if (object.payments != null) {
       yield r'payments';
       yield serializers.serialize(
@@ -111,7 +129,9 @@ class _$CreateAppointmentRequestSerializer implements PrimitiveSerializer<Create
     CreateAppointmentRequest object, {
     FullType specifiedType = FullType.unspecified,
   }) {
-    return _serializeProperties(serializers, object, specifiedType: specifiedType).toList();
+    return _serializeProperties(serializers, object,
+            specifiedType: specifiedType)
+        .toList();
   }
 
   void _deserializeProperties(
@@ -168,6 +188,13 @@ class _$CreateAppointmentRequestSerializer implements PrimitiveSerializer<Create
           ) as num;
           result.depositAmount = valueDes;
           break;
+        case r'tip':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(int),
+          ) as int;
+          result.tip = valueDes;
+          break;
         case r'payments':
           final valueDes = serializers.deserialize(
             value,
@@ -203,4 +230,3 @@ class _$CreateAppointmentRequestSerializer implements PrimitiveSerializer<Create
     return result.build();
   }
 }
-

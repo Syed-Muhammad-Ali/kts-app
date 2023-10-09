@@ -21,7 +21,9 @@ part 'update_appointment_request.g.dart';
 /// * [depositAmount] 
 /// * [cost] 
 /// * [addPayments] 
+/// * [addPayments] 
 /// * [removePayments] 
+/// * [tip] 
 @BuiltValue()
 abstract class UpdateAppointmentRequest implements Built<UpdateAppointmentRequest, UpdateAppointmentRequestBuilder> {
   @BuiltValueField(wireName: r'id')
@@ -44,6 +46,9 @@ abstract class UpdateAppointmentRequest implements Built<UpdateAppointmentReques
 
   @BuiltValueField(wireName: r'cost')
   num get cost;
+
+   @BuiltValueField(wireName: r'tip')
+  int? get tip; // Declare the tip field
 
   @BuiltValueField(wireName: r'addPayments')
   BuiltList<Payment2>? get addPayments;
@@ -108,6 +113,11 @@ class _$UpdateAppointmentRequestSerializer implements PrimitiveSerializer<Update
     yield serializers.serialize(
       object.cost,
       specifiedType: const FullType(num),
+    );
+    yield r'tip';
+    yield serializers.serialize(
+      object.tip,
+      specifiedType: const FullType(int),
     );
     if (object.addPayments != null) {
       yield r'addPayments';
@@ -195,6 +205,13 @@ class _$UpdateAppointmentRequestSerializer implements PrimitiveSerializer<Update
           ) as num;
           result.cost = valueDes;
           break;
+        case r'tip':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(int),
+          ) as int;
+          result.tip = valueDes;
+          break;  
         case r'addPayments':
           final valueDes = serializers.deserialize(
             value,
